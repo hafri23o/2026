@@ -16,7 +16,8 @@ const createMScreenshot = (name: string, sizes: string) => ({
 })
 
 export default defineConfig({
-  base: '/', // Set base path for GitHub Pages deployment
+  // Set base path for GitHub Pages deployment
+  base: '/',
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
@@ -28,7 +29,6 @@ export default defineConfig({
     polyfillModulePreload: false,
     cssCodeSplit: false,
     minify: 'terser',
-    sourcemap: 'hidden', // Ensure source maps are included but not eval-based
     terserOptions: {
       output: {
         comments: false,
@@ -48,7 +48,8 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: undefined, // Disable vendor chunk.
+        // Disable vendor chunk.
+        manualChunks: undefined,
         preferConst: true,
       },
     },
@@ -57,14 +58,24 @@ export default defineConfig({
     createHtmlPlugin({
       minify: true,
     }),
+    // Vite always bundles or imports all scripts into one file.
+    // In unsupported browsers we want to display error message about it,
+    // but because everything is bundled into one file, main app bundle
+    // fails to load because of syntax errors and no message is displayed.
+    // This plugin fixes that by emiting script separetly
+    // and including it inside html.
     injectScriptsToHtmlDuringBuild({
       input: ['./src/disable-app-if-not-supported.ts'],
     }),
+    // If https://github.com/seek-oss/vanilla-extract/discussions/222 is ever implemented,
+    // this plugin can be replaced.
     mangleClassNames(),
     vanillaExtractPlugin(),
     solidPlugin({
       hot: false,
     }),
+    // ViteWebfontDownload plugin removed to eliminate Google Fonts dependency
+    // Now using system fonts for better offline performance
     serviceWorker({
       manifest: {
         short_name: 'Osho',
