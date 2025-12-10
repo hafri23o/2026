@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: Chosmochords
+    name: NEWmee
     env: static
     buildCommand: "npm install && npm run build"
     staticPublishPath: dist
