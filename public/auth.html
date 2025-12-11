@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login & Signup</title>
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+    body { background: #b8adeb; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .container { width: 360px; background: #fff; padding: 30px 35px; border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2 { text-align: center; margin-bottom: 20px; font-size: 28px; font-weight: 700; }
+    .switch-tabs { display: flex; border-radius: 15px; overflow: hidden; margin-bottom: 25px; background: #f1f1f1; }
+    .switch-tabs button { flex: 1; padding: 10px 0; border: none; font-size: 16px; cursor: pointer; background: none; transition: 0.3s; font-weight: 500; }
+    .switch-tabs .active { background: linear-gradient(to right, #023b86, #0576ff); color: #fff; }
+    .input-box { width: 100%; margin-bottom: 15px; }
+    .input-box input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; font-size: 15px; }
+    .forgot { margin-bottom: 15px; font-size: 14px; }
+    .forgot a { color: #0066ff; text-decoration: none; }
+    .btn { width: 100%; padding: 12px;
+        background: linear-gradient(to right, #023b86, #0576ff);
+        color: #fff; font-size: 17px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; margin-top: 5px; }
+    .bottom-text { text-align: center; margin-top: 18px; font-size: 14px; }
+    .bottom-text a { color: #0066ff; text-decoration: none; font-weight: 500; }
+    #signupForm { display: none; }
+    #errorBox { color: red; text-align: center; margin-bottom: 10px; font-size: 14px; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2 id="formTitle">Login Form</h2>
+
+    <div class="switch-tabs">
+        <button id="loginTab" class="active">Login</button>
+        <button id="signupTab">Signup</button>
+    </div>
+
+    <div id="errorBox"></div>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm">
+        <div class="input-box"><input id="loginEmail" type="email" placeholder="Email Address" required></div>
+        <div class="input-box"><input id="loginPassword" type="password" placeholder="Password" required></div>
+
+        <div class="forgot"><a href="#" id="resetBtn">Forgot password?</a></div>
+        <button class="btn" type="submit">Login</button>
+
+        <div class="bottom-text">
+            Not a member? <a href="#" id="goSignup">Signup now</a>
+        </div>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form id="signupForm">
+        <div class="input-box"><input id="signupEmail" type="email" placeholder="Email Address" required></div>
+        <div class="input-box"><input id="signupPassword" type="password" placeholder="Password" required></div>
+        <div class="input-box"><input id="signupConfirm" type="password" placeholder="Confirm password" required></div>
+
+        <button class="btn" type="submit">Signup</button>
+    </form>
+</div>
+
+<script type="module" src="/src/auth.js"></script>
+
+</body>
+</html>
