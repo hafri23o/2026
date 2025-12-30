@@ -108,7 +108,7 @@ resetBtn.onclick = async (e) => {
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is logged in, redirect to home page or dashboard
-    window.location.href = "/home.html";  // Adjust the redirect URL to your app's main page
+    window.location.href = "/library";  // Adjust the redirect URL to your app's main page
   } else {
     // User is not logged in, stay on the login/signup page
     console.log("User is not logged in");
