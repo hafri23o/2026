@@ -1,16 +1,12 @@
-<!doctype html >
-<html lang='en-US'>
+<!doctype html>
+<html lang="en-US">
   <head>
     <title>Osho Digital Library</title>
-    <meta charset='UTF-8'>
-    <base href='./'>
+    <meta charset="UTF-8">
+    <base href="./">
 
-    <!--
-      TODO. For now only Chrome supports 'unsafe-hashes' option.
-      When other browsers support it, it is safer to use it than 'unsafe-hashes'.
-      script-src: 'unsafe-hashes' 'sha256-nNExX8dGhf3ce7nlLMW210YbT1+ATSaoMpg5lf/l+Ng='
-    -->
-    <meta http-equiv='Content-Security-Policy' content="
+    <!-- Security settings -->
+    <meta http-equiv="Content-Security-Policy" content="
       default-src 'none';
       connect-src 'self' blob: *;
       script-src 'self' blob: 'unsafe-inline' https://gc.zgo.at/;
@@ -24,34 +20,87 @@
       base-uri 'none';
     ">
 
-    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
-    <meta name='theme-color' content='#2a2827'>
-    <meta name='description' content='A comprehensive digital library of Osho teachings and discourses.'>
-    <link rel='icon' href='/icons/icon_responsive.svg' type='image/svg+xml' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#2a2827">
+    <meta name="description" content="A comprehensive digital library of Osho teachings and discourses.">
+    <link rel="icon" href="/icons/icon_responsive.svg" type="image/svg+xml" />
     <link rel="alternate icon" href="/icons/icon_16.png" sizes="16x16" type="image/png" />
-    <link rel='apple-touch-icon' href='/icons/apple-touch-icon.png' sizes='180x180' />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" sizes="180x180" />
+    
+    <!-- Include login.css for styling -->
+    <style>
+      /* Add login form styles here (as previously shown in the previous step) */
+    </style>
   </head>
-  <body>
+  
+  <body onload="checkLoginStatus()">
     <noscript>
       Please enable Javascript in order to use this app.
     </noscript>
-    <div id='unsupported-browser' hidden>
+
+    <div id="unsupported-browser" hidden>
       <div>This browser does not support required technologies for this app to function correctly.</div>
       <div>Please upgrade your browser to the latest version of:</div>
-      <a href='https://www.mozilla.org/en-US/firefox/new/'>Firefox</a>
-      <a href='https://www.microsoft.com/en-us/windows/microsoft-edge'>Edge</a>
-      <a href='https://www.google.com/chrome/'>Chrome</a>
-      <a href='https://www.apple.com/safari/'>Safari</a>
+      <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+      <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a>
+      <a href="https://www.google.com/chrome/">Chrome</a>
+      <a href="https://www.apple.com/safari/">Safari</a>
     </div>
 
-    <script type='module' src='./src/index.ts'></script>
+    <!-- Login Form Section (as previously shown) -->
+    <div class="container">
+      <h2 id="formTitle">Login Form</h2>
+
+      <div class="switch-tabs">
+        <button id="loginTab" class="active">Login</button>
+        <button id="signupTab">Signup</button>
+      </div>
+
+      <div id="errorBox"></div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm">
+        <div class="input-box"><input id="loginEmail" type="email" placeholder="Email Address" required></div>
+        <div class="input-box"><input id="loginPassword" type="password" placeholder="Password" required></div>
+
+        <div class="forgot"><a href="#" id="resetBtn">Forgot password?</a></div>
+        <button class="btn" type="submit">Login</button>
+
+        <div class="bottom-text">
+          Not a member? <a href="#" id="goSignup">Signup now</a>
+        </div>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form id="signupForm">
+        <div class="input-box"><input id="signupEmail" type="email" placeholder="Email Address" required></div>
+        <div class="input-box"><input id="signupPassword" type="password" placeholder="Password" required></div>
+        <div class="input-box"><input id="signupConfirm" type="password" placeholder="Confirm password" required></div>
+
+        <button class="btn" type="submit">Signup</button>
+      </form>
+    </div>
+
+    <script type="module" src="/src/auth.js"></script>
+    <script type="module" src="./src/index.ts"></script>
     <script nomodule src="/nomodule.js"></script>
-    <script
-      src='https://gc.zgo.at/count.js'
-      data-goatcounter='https://snaeplayer.goatcounter.com/count'
-      crossorigin='anonymous'
-      async
-    >
+    <script src="https://gc.zgo.at/count.js" data-goatcounter="https://snaeplayer.goatcounter.com/count" crossorigin="anonymous" async></script>
+
+    <script>
+      // Check if the user is logged in
+      function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');  // Check if user is logged in (assuming this flag is set after login)
+        if (isLoggedIn === 'true') {
+          // Redirect to another page (home page, dashboard, etc.)
+          window.location.href = '/home.html'; // Replace with the actual home or dashboard URL
+        }
+      }
+
+      // Optional: You can add a logout function to clear the login status
+      function logout() {
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = '/';  // Redirect back to the login page
+      }
     </script>
   </body>
 </html>
