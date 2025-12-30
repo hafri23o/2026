@@ -2,7 +2,8 @@ import { auth } from "./firebase.js";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  onAuthStateChanged // Firebase listener for authentication state
 } from "firebase/auth";
 
 // UI elements
@@ -102,3 +103,14 @@ resetBtn.onclick = async (e) => {
     errorBox.textContent = err.message;
   }
 };
+
+// --- Check Login Status on Page Load ---
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is logged in, redirect to home page or dashboard
+    window.location.href = "/home.html";  // Adjust the redirect URL to your app's main page
+  } else {
+    // User is not logged in, stay on the login/signup page
+    console.log("User is not logged in");
+  }
+});
