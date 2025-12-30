@@ -12,7 +12,7 @@ series:
         name: "Kathopanishad 01"
         duration: 7043  # 01:57:23
         trackNo: 1
-        audioUrl: "/audio/kath_001.mp3"
+        audioUrl: "https://oshoworld.com/wp-content/uploads/2020/11/Hindi%20Audio/OSHO-Kathopanishad_05.mp3"
         description: "प्रथम वल्ली - ॐ उशन्‌ ह वै वाजश्रवसः सर्ववेदसं ददौ। तस्य ह नचिकेता नाम पुत्र आस।।1।। तंह कुमारं सन्तं दक्षिणासु नीयमानासु श्रद्धाऽऽविवेश सोऽमन्यत।।2।।"
         topics: ["kathopanishad", "upanishad", "meditation", "death", "naciketa"]
 
@@ -20,7 +20,7 @@ series:
         name: "Kathopanishad 02"
         duration: 4502  # 01:15:02
         trackNo: 2
-        audioUrl: "/audio/kath_002.mp3"
+        audioUrl: "https://oshoworld.com/wp-content/uploads/2020/11/Hindi%20Audio/OSHO-Kathopanishad_05.mp3"
         description: "येयं प्रेते विचिकित्सा मनुष्येऽस्तीत्येके नायमस्तीति चैके। एतद्विद्यामनुशिष्टस्त्वयाहं वराणामेष वरस्तृतीयः।।20।।"
         topics: ["kathopanishad", "death", "afterlife", "wisdom"]
 
@@ -28,8 +28,48 @@ series:
         name: "Kathopanishad 03"
         duration: 4774  # 01:19:34
         trackNo: 3
-        audioUrl: "/audio/kath_003.mp3"
-        description: "द्वितीय वल्ली - अन्यत्छ्रेयोऽन्यदुतैव प्रेयस्ते उभे नानार्थे पुरुषं सिनीतः। तयोः श्रेय आददानस्य साधु भवति हीयतेऽर्थाद्य उ प्रेयो वृणीते।।1।।"
+        audioUrl: "https://oshoworld.com/wp-content/uploads/2020/11/Hindi%20Audio/OSHO-Kathopanishad_05.mp3"
+        description: "All my friends are heathens, take it slow
+Wait for them to ask you who you know
+Please don't make any sudden moves
+You don't know the half of the abuse
+All my friends are heathens, take it slow
+Wait for them to ask you who you know
+Please don't make any sudden moves
+You don't know the half of the abuse
+Welcome to the room of people who have rooms of people
+That they loved one day docked away
+Just because we check the guns at the door
+Doesn't mean our brains will change from hand grenades
+You'll never know the psychopath sitting next to you
+You'll never know the murderer sitting next to you
+You'll think, "How'd I get here, sitting next to you?"
+But after all I've said, please don't forget
+All my friends are heathens, take it slow
+Wait for them to ask you who you know
+Please don't make any sudden moves
+You don't know the half of the abuse
+We don't deal with outsiders very well
+They say newcomers have a certain smell
+You have trust issues, not to mention
+They say they can smell your intentions
+You'll never know the freak show sitting next to you
+You'll have some weird people sitting next to you
+You'll think, "How did I get here, sitting next to you?"
+But after all I've said, please don't forget (watch it)
+(Watch it)
+All my friends are heathens, take it slow
+Wait for them to ask you who you know
+Please don't make any sudden moves
+You don't know the half of the abuse
+All my friends are heathens, take it slow (watch it)
+Wait for them to ask you who you know (watch it)
+Please, all my friends are heathens, take it slow (watch it)
+Wait for them to ask you who you know
+Why'd you come? You knew you should have stayed
+I tried to warn you just to stay away
+And now they're outside ready to bust
+It looks like you might be one of us"
         topics: ["kathopanishad", "choice", "pleasure", "good"]
 
       - id: "kath_004"
@@ -61,59 +101,8 @@ series:
         duration: 4306  # 01:11:46
         trackNo: 7
         audioUrl: "https://oshoworld.com/wp-content/uploads/2020/11/Hindi%20Audio/OSHO-Kathopanishad_07.mp3"
-        description: "Why should I try and judge the things they say
-That just won't budge, I'm letting go
-And sheltered from the blind
-So you managed to be kind
-But still enough to show me how to keep it together
-When I'm crying out in vain
-No matter who's to blame
-There's still a ways to go
-So, if you ask me to believe your heart won't follow you
-It's got a mind of its own
-
-When it says Run and the road gets rough
-And you're the one
-Whose shoulders just ain't wide enough
-Whose shoulders shrug when they've had enough
-
-I'd be the last to say, don't follow your heart
-But there's more to what it takes to be a man
-Than what you've known
-What you've shown
-Than that we know you understand
-
-It's not the thing, if I were you
-I would say all that I do
-To be half as strong, or still belong
-If you should take the time
-To look back at what you find
-Your heart misadventures
-
-When it says "Run" and the road etsrough
-And you're the one
-Whose shoulders just ain't wide enough
-Whose shoulders shrug when they've had enough
-
-I'd be the last to I'd be the last to say, don't follow your hearto what it takes to be a man
-Than what you've known
-What you've shown
-Than that we know you understand
-In fact, I never saIn fact, I never said, don't follow your hearts what it takes to make a man
-From what you've known
-All that you've been shown
-Gee, even now I'd hope you'd understand
-
-I'd be the last to I'd be the last to say, don't follow your hearo what it takes to be a man
-Than what you've known
-And what you've shown
-Than what we know you understand
-In fact, I'd never say, "don't follow your eart"
-If I thought that's what it'd take to make a man
-From what you've known
-All that you've been shown
-Gee, even now I'd hope you'd understand"
-'d hope you'd understandnishad", "wisdom", "mind-control", "senses"]
+        description: "यस्तु विज्ञानवान्‌ भवति युक्तेन मनसा सदा। तस्येन्द्रियाणि वश्यानि सदश्वा इव सारथेः।।6।।"
+        topics: ["kathopanishad", "wisdom", "mind-control", "senses"]
 
       - id: "kath_008"
         name: "Kathopanishad 08"
