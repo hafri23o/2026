@@ -22,6 +22,4 @@ export const ROUTES: RouteDefinition[] = [
     path: '/',
     element: () => <Navigate href={LIBRARY_PATH} />,
 }
-  },
-  notFoundRoute,
 ];
