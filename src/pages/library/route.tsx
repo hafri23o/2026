@@ -5,18 +5,17 @@ import Library from './library'
 
 export { LIBRARY_PATH, DEFAULT_LIBRARY_PATH }
 
+// Define the library routes
 const libraryRoutes: RouteDefinition[] = CONFIG.map((page) => ({
   path: page.path,
   component: () => <LibraryPage {...page} />,
 }))
 
+// Define the library route separately, but keep the default to index.html
 const route: RouteDefinition = {
-  path: '/library',
-  // Library is a focal point of this app.
-  // Most people will land on this page.
-  // There isn't much to be gained loading it lazily.
-  component: Library,
-  children: libraryRoutes,
+  path: '/library',  // The library route
+  component: Library,  // The component for the library
+  children: libraryRoutes,  // Nested library pages
 }
 
 export default route
