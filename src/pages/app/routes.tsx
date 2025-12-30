@@ -20,7 +20,8 @@ export const ROUTES: RouteDefinition[] = [
   {
     // This will load index.html or any component you'd like as the default page
     path: '/',
-    element: () => <Navigate href={LIBRARY_PATH} />,
+    element: () => <Navigate href="/" />,
+}
   },
   notFoundRoute,
 ];
