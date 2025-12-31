@@ -1,17 +1,15 @@
-// src/pages/auth/config.tsx
+// src/pages/auth/route.tsx
 
-export const API_URL = 'https://newmee.onrender.com/auth';
-export const LOGIN_URL = `${API_URL}/login`;
-export const SIGNUP_URL = `${API_URL}/signup`;
+import { Route, Routes } from 'solid-app-router';
+import { LoginForm, SignupForm } from './auth';  // Corrected import
 
-export const formFields = {
-  login: {
-    email: '',
-    password: '',
-  },
-  signup: {
-    email: '',
-    password: '',
-    confirmPassword: '',
-  },
+const AuthRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/login" component={LoginForm} />
+      <Route path="/signup" component={SignupForm} />
+    </Routes>
+  );
 };
+
+export default AuthRoutes;
