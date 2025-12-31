@@ -28,28 +28,31 @@ const auth = getAuth(app);
 const isLoggedIn = () => auth.currentUser !== null;
 
 const initialRender = () => {
-  if (isLoggedIn()) {
-    createApp(App)
-      .use(Router)
-      .use(MusicImagesProvider)
-      .use(RootStoresProvider)
-      .use(ModalsProvider)
-      .use(MenuProvider)
-      .mount('body');
-  } else {
-    createApp(() => (
-      <Router>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/app" element={<App />} />
-        </Routes>
-      </Router>
-    ))
-      .use(RootStoresProvider)
-      .use(MusicImagesProvider)
-      .use(ModalsProvider)
-      .mount('body');
-  }
+  // Dynamically use eval to decide which component to render based on login status
+  eval(`
+    if (isLoggedIn()) {
+      createApp(App)
+        .use(Router)
+        .use(MusicImagesProvider)
+        .use(RootStoresProvider)
+        .use(ModalsProvider)
+        .use(MenuProvider)
+        .mount('body');
+    } else {
+      createApp(() => (
+        <Router>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/app" element={<App />} />
+          </Routes>
+        </Router>
+      ))
+        .use(RootStoresProvider)
+        .use(MusicImagesProvider)
+        .use(ModalsProvider)
+        .mount('body');
+    }
+  `);
 };
 
 if (window.isSupportedBrowser !== false) {
