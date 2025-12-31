@@ -1,15 +1,11 @@
-<!doctype html >
+<!doctype html>
 <html lang='en-US'>
   <head>
     <title>Osho Digital Library</title>
     <meta charset='UTF-8'>
     <base href='./'>
 
-    <!--
-      TODO. For now only Chrome supports 'unsafe-hashes' option.
-      When other browsers support it, it is safer to use it than 'unsafe-hashes'.
-      script-src: 'unsafe-hashes' 'sha256-nNExX8dGhf3ce7nlLMW210YbT1+ATSaoMpg5lf/l+Ng='
-    -->
+    <!-- Content Security Policy -->
     <meta http-equiv='Content-Security-Policy' content="
       default-src 'none';
       connect-src 'self' blob: *;
@@ -30,6 +26,10 @@
     <link rel='icon' href='/icons/icon_responsive.svg' type='image/svg+xml' />
     <link rel="alternate icon" href="/icons/icon_16.png" sizes="16x16" type="image/png" />
     <link rel='apple-touch-icon' href='/icons/apple-touch-icon.png' sizes='180x180' />
+
+    <!-- Link to External CSS (style.css) -->
+    <link rel="stylesheet" href="styles.css">
+
   </head>
   <body>
     <noscript>
@@ -44,14 +44,131 @@
       <a href='https://www.apple.com/safari/'>Safari</a>
     </div>
 
-    <script type='module' src='./src/index.ts'></script>
-    <script nomodule src="/nomodule.js"></script>
+    <!-- Login / Signup Page Structure -->
+    <div id="auth-container" class="container">
+      <!-- Login form -->
+      <div class="login form">
+        <header>Login</header>
+        <form action="#">
+          <input type="text" id='inUsr' placeholder="Enter your email">
+          <input type="password" id="inPass" placeholder="Enter your password">
+          <span class="signup">
+            <a href="#" id="forgotLabel">Forgot password?</a>
+          </span>
+          <input type="button" class="button loginbtn" value="Login">
+        </form>
+        <div class="signup">
+          <span class="signup">Don't have an account?
+            <a href="#" id="signupLabel">Signup</a>
+          </span>
+        </div>
+      </div>
+
+      <!-- Registration form -->
+      <div class="registration form">
+        <header>Signup</header>
+        <form action="#">
+          <input type="text" id="name" placeholder="Enter your name">
+          <input type="text" id='username' placeholder="Enter your username">
+          <input type="text" id='email' placeholder="Enter your email">
+          <input type="password" id='password' placeholder="Create a password">
+          <input type="button" class="button signupbtn" value="Signup">
+        </form>
+        <div class="signup">
+          <span class="signup">Already have an account?
+            <a href="#" id="loginLabel">Login</a>
+          </span>
+        </div>
+      </div>
+
+      <!-- Forgot Password form -->
+      <div class="forgot form">
+        <header>Forgot Password</header>
+        <form action="#">
+          <input type="text" id='forgotinp' placeholder="Enter your email">
+          <input type="button" class="button forgotbtn" value="Submit">
+        </form>
+        <div class="signup">
+          <span class="signup">Don't have an account?
+            <a href="#" id="signupLabel">Signup</a>
+          </span>
+        </div>
+        <div class="signup">
+          <span class="signup">Already have an account?
+            <a href="#" id="loginLabel">Login</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <!-- Import your app logic here -->
+    <script type="module" src="./src/index.ts"></script>
+
+    <!-- Script to handle Firebase Authentication and page transitions -->
+    <script type="module">
+      import { initializeApp } from 'firebase/app';
+      import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // Handle login logic
+      const loginBtn = document.querySelector('.loginbtn');
+      loginBtn.addEventListener('click', () => {
+        const email = document.getElementById('inUsr').value;
+        const password = document.getElementById('inPass').value;
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            localStorage.setItem('userLoggedIn', 'true');
+            // Replace login page with main app
+            document.getElementById('auth-container').style.display = 'none';
+            // Add code to load the main app or transition to the main page
+          })
+          .catch((error) => {
+            console.error("Error signing in: ", error);
+          });
+      });
+
+      // Handle signup logic (optional)
+      const signupBtn = document.querySelector('.signupbtn');
+      signupBtn.addEventListener('click', () => {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            console.log('User signed up: ', user);
+          })
+          .catch((error) => {
+            console.error("Error signing up: ", error);
+          });
+      });
+    </script>
+
+    <!-- Goatcounter Script -->
     <script
       src='https://gc.zgo.at/count.js'
       data-goatcounter='https://snaeplayer.goatcounter.com/count'
       crossorigin='anonymous'
       async
-    >
-    </script>
+    ></script>
   </body>
 </html>
