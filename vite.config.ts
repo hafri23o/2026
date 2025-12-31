@@ -15,8 +15,7 @@ const createMScreenshot = (name: string, sizes: string) => ({
 })
 
 export default defineConfig({
-  // Set base path for GitHub Pages deployment
-  base: '/',
+  base: '/',  // Set base path for GitHub Pages deployment
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
@@ -47,8 +46,8 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        format: 'es', // Ensure output format for Web Workers is ES modules
-        manualChunks: undefined, // Disable vendor chunk
+        format: 'es',
+        manualChunks: undefined,
         preferConst: true,
       },
       plugins: [
@@ -56,29 +55,24 @@ export default defineConfig({
           name: 'worker-plugin-fix',
           resolveId(id) {
             if (id.endsWith('?worker')) {
-              return id // Ensure correct resolution for worker imports
+              return id
             }
           },
         },
       ],
-      // Make sure Web Workers are in ES format
       worker: {
-        format: 'es', // Web Workers should be treated as ES modules
+        format: 'es', // Web Workers as ES modules
       },
     },
   },
   plugins: [
-    createHtmlPlugin({
-      minify: true,
-    }),
+    createHtmlPlugin({ minify: true }),
     injectScriptsToHtmlDuringBuild({
       input: ['./src/disable-app-if-not-supported.ts'],
     }),
     mangleClassNames(),
     vanillaExtractPlugin(),
-    solidPlugin({
-      hot: false,
-    }),
+    solidPlugin({ hot: false }),  // Make sure hot reloading is correctly disabled
     serviceWorker({
       manifest: {
         short_name: 'Osho',
