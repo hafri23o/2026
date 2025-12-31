@@ -6,7 +6,7 @@ import { RootStoresProvider } from './stores/stores';
 import { ModalsProvider } from './components/modals/modals';
 import { ErrorPage } from './pages/error/error';
 import { App } from './pages/app/app';
-import LoginPage from './pages/login/login';
+import LoginPage from './pages/auth/auth.tsx';
 
 // Firebase initialization
 import { initializeApp } from 'firebase/app';
@@ -58,3 +58,4 @@ const initialRender = () => {
 if (window.isSupportedBrowser !== false) {
   initialRender();
 }
+
