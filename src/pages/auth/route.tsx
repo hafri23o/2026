@@ -1,0 +1,16 @@
+// src/pages/auth/route.tsx
+
+import { Route, Routes } from 'solid-app-router';
+import LoginForm from './auth';
+import SignupForm from './auth';
+
+const AuthRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/login" component={LoginForm} />
+      <Route path="/signup" component={SignupForm} />
+    </Routes>
+  );
+};
+
+export default AuthRoutes;
