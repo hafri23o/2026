@@ -3,7 +3,6 @@ import { defineConfig } from 'vite'
 import solidPlugin from 'vite-plugin-solid'
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 import { createHtmlPlugin } from 'vite-plugin-html'
-// import { ViteWebfontDownload } from 'vite-plugin-webfont-dl' // Removed - no longer needed
 import manifest from './package.json'
 import { mangleClassNames } from './lib/vite-mangle-classnames'
 import { injectScriptsToHtmlDuringBuild } from './lib/vite-inject-scripts-to-html'
@@ -48,46 +47,38 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Ensure the correct format for Web Workers and code-splitting
-        format: 'es', // Set format for Web Workers to 'es'
+        format: 'es', // Ensure output format for Web Workers is ES modules
         manualChunks: undefined, // Disable vendor chunk
         preferConst: true,
       },
-      // Specifically for handling Web Worker files in ES module format
       plugins: [
         {
           name: 'worker-plugin-fix',
           resolveId(id) {
             if (id.endsWith('?worker')) {
-              return id // Ensures correct worker resolution
+              return id // Ensure correct resolution for worker imports
             }
           },
         },
       ],
+      // Make sure Web Workers are in ES format
+      worker: {
+        format: 'es', // Web Workers should be treated as ES modules
+      },
     },
   },
   plugins: [
     createHtmlPlugin({
       minify: true,
     }),
-    // Vite always bundles or imports all scripts into one file.
-    // In unsupported browsers we want to display error message about it,
-    // but because everything is bundled into one file, main app bundle
-    // fails to load because of syntax errors and no message is displayed.
-    // This plugin fixes that by emitting scripts separately
-    // and including it inside html.
     injectScriptsToHtmlDuringBuild({
       input: ['./src/disable-app-if-not-supported.ts'],
     }),
-    // If https://github.com/seek-oss/vanilla-extract/discussions/222 is ever implemented,
-    // this plugin can be replaced.
     mangleClassNames(),
     vanillaExtractPlugin(),
     solidPlugin({
       hot: false,
     }),
-    // ViteWebfontDownload plugin removed to eliminate Google Fonts dependency
-    // Now using system fonts for better offline performance
     serviceWorker({
       manifest: {
         short_name: 'Osho',
@@ -124,10 +115,4 @@ export default defineConfig({
       },
     }),
   ],
-  // To address the polyfillModulePreload deprecation warning
-  build: {
-    modulePreload: {
-      polyfill: true, // Enable the new polyfill for module preload
-    },
-  },
 })
