@@ -6,13 +6,12 @@ import { RootStoresProvider } from './stores/stores';
 import { ModalsProvider } from './components/modals/modals';
 import { ErrorPage } from './pages/error/error';
 import { App } from './pages/app/app';
-import LoginPage from './pages/login/login';  // Corrected import
+import LoginPage from './pages/login/login';
 
-// Firebase initialization (if used)
+// Firebase initialization
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
-// Firebase config - Replace with your actual Firebase credentials
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_AUTH_DOMAIN",
@@ -25,25 +24,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Function to check if the user is logged in (example logic)
-const isLoggedIn = () => {
-  return localStorage.getItem('userLoggedIn') === 'true';
-};
+// Check if user is logged in via Firebase
+const isLoggedIn = () => auth.currentUser !== null;
 
-// Function to handle initial render
 const initialRender = () => {
-  // If user is logged in, show main app, otherwise show login page
   if (isLoggedIn()) {
     createApp(App)
       .use(Router)
-      .use(ErrorPage)
       .use(MusicImagesProvider)
       .use(RootStoresProvider)
       .use(ModalsProvider)
       .use(MenuProvider)
       .mount('body');
   } else {
-    // Display the login page when user is not logged in
     createApp(() => (
       <Router>
         <Routes>
@@ -59,7 +52,6 @@ const initialRender = () => {
   }
 };
 
-// Run initial render logic after browser check
 if (window.isSupportedBrowser !== false) {
   initialRender();
 }
