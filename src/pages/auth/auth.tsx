@@ -1,7 +1,7 @@
 // src/pages/auth/auth.tsx
 
 import { createSignal } from 'solid-js';
-import { LOGIN_URL, SIGNUP_URL, formFields } from './config';
+import { LOGIN_URL, SIGNUP_URL, formFields } from './config'; // Now works since formFields is exported
 
 const AuthForm = (props) => {
   const [formData, setFormData] = createSignal(formFields[props.formType]);
