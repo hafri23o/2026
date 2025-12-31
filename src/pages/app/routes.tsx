@@ -1,6 +1,6 @@
 import { Navigate } from '@solidjs/router'
 import { LoginForm, SignupForm } from '../auth/auth'
-import App from './App'
+import { App } from './app'
 import ProtectedRoute from '../../components/ProtectedRoute'
 
 export const ROUTES = [
