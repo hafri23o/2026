@@ -2,7 +2,6 @@
 
 import { createSignal } from 'solid-js';
 import { LOGIN_URL, SIGNUP_URL, formFields } from './config';
-import { fetch } from 'solid-utils';
 
 const AuthForm = (props) => {
   const [formData, setFormData] = createSignal(formFields[props.formType]);
@@ -15,19 +14,23 @@ const AuthForm = (props) => {
     setErrorMessage('');
 
     const url = props.formType === 'login' ? LOGIN_URL : SIGNUP_URL;
-    const response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(formData()),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(formData()),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      setErrorMessage(errorData.message || 'Something went wrong');
-    } else {
-      // Handle successful login or signup
+      if (!response.ok) {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Something went wrong');
+      } else {
+        // Handle successful login or signup
+      }
+    } catch (error) {
+      setErrorMessage('Network error occurred. Please try again.');
     }
     setIsSubmitting(false);
   };
