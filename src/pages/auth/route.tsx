@@ -1,8 +1,7 @@
 // src/pages/auth/route.tsx
 
 import { Route, Routes } from 'solid-app-router';
-import LoginForm from './auth';
-import SignupForm from './auth';
+import { LoginForm, SignupForm } from './auth'; // Corrected import to use named exports
 
 const AuthRoutes = () => {
   return (
