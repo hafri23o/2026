@@ -10,6 +10,7 @@ import settingsRoute from '../settings/route'
 import aboutRoute from '../about/route'
 import notFoundRoute from '../not-found/route'
 import authRoute from '../auth/route'  // Import the auth routes
+import { LoginForm, SignupForm } from '../auth/auth'
 
 export const ROUTES: RouteDefinition[] = [
   // Auth routes as the first route to be loaded
