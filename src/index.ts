@@ -47,8 +47,8 @@ const initialRender = () => {
     createApp(() => (
       <Router>
         <Routes>
-          <Route path="/" component={LoginPage} />
-          <Route path="/app" component={App} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/app" element={<App />} />
         </Routes>
       </Router>
     ))
