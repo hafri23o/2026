@@ -1,7 +1,12 @@
 // src/pages/auth/config.tsx
 
 // Exporting the API URLs and form fields
-export const API_URL = 'https://newmee.onrender.com/auth';
+const API_URL = import.meta.env.VITE_API_URL
+
+if (!API_URL) {
+  throw new Error('VITE_API_URL is not defined')
+}
+
 export const LOGIN_URL = `${API_URL}/login`;
 export const SIGNUP_URL = `${API_URL}/signup`;
 
