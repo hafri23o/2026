@@ -9,19 +9,29 @@ import searchRoute from '../search/route'
 import settingsRoute from '../settings/route'
 import aboutRoute from '../about/route'
 import notFoundRoute from '../not-found/route'
-import authRoute from '../auth/route'  // Import the auth routes
 
+// src/pages/auth/route.tsx
+
+import { RouteDefinition, Navigate } from 'solid-app-router';
+
+// Define the routes for static HTML pages
 export const ROUTES: RouteDefinition[] = [
-  // Auth routes as the first route to be loaded
+  // Redirect to static HTML login/signup pages
   {
-    path: '/',
-    children: [
-      { path: '/login', component: authRoute.LoginForm },
-      { path: '/signup', component: authRoute.SignupForm },
-    ],
-    element: () => <Navigate href="/login" />,  // Redirect to login page initially
+    path: '/login',
+    element: () => {
+      window.location.href = '/login.html';  // Directly redirect to login.html
+      return null;
+    },
   },
-  
+  {
+    path: '/signup',
+    element: () => {
+      window.location.href = '/signup.html';  // Directly redirect to signup.html
+      return null;
+    },
+  },
+
   // Other routes for the application
   libraryRoute,
   playerRoute,
@@ -29,7 +39,7 @@ export const ROUTES: RouteDefinition[] = [
   searchRoute,
   settingsRoute,
   aboutRoute,
-  
+
   // Fallback route
   notFoundRoute,
-]
+];
