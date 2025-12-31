@@ -48,10 +48,22 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Disable vendor chunk.
-        manualChunks: undefined,
+        // Ensure the correct format for Web Workers and code-splitting
+        format: 'es', // Set format for Web Workers to 'es'
+        manualChunks: undefined, // Disable vendor chunk
         preferConst: true,
       },
+      // Specifically for handling Web Worker files in ES module format
+      plugins: [
+        {
+          name: 'worker-plugin-fix',
+          resolveId(id) {
+            if (id.endsWith('?worker')) {
+              return id // Ensures correct worker resolution
+            }
+          },
+        },
+      ],
     },
   },
   plugins: [
@@ -62,7 +74,7 @@ export default defineConfig({
     // In unsupported browsers we want to display error message about it,
     // but because everything is bundled into one file, main app bundle
     // fails to load because of syntax errors and no message is displayed.
-    // This plugin fixes that by emiting script separetly
+    // This plugin fixes that by emitting scripts separately
     // and including it inside html.
     injectScriptsToHtmlDuringBuild({
       input: ['./src/disable-app-if-not-supported.ts'],
@@ -112,4 +124,10 @@ export default defineConfig({
       },
     }),
   ],
+  // To address the polyfillModulePreload deprecation warning
+  build: {
+    modulePreload: {
+      polyfill: true, // Enable the new polyfill for module preload
+    },
+  },
 })
