@@ -1,7 +1,9 @@
 // src/pages/auth/auth.tsx
 
 import { createSignal } from 'solid-js';
-import { LOGIN_URL, SIGNUP_URL, formFields } from './config'; // Now works since formFields is exported
+import { LOGIN_URL, SIGNUP_URL, formFields } from './config';
+import { auth } from '../../firebaseConfig'; // Import Firebase authentication
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const AuthForm = (props) => {
   const [formData, setFormData] = createSignal(formFields[props.formType]);
@@ -13,24 +15,22 @@ const AuthForm = (props) => {
     setIsSubmitting(true);
     setErrorMessage('');
 
-    const url = props.formType === 'login' ? LOGIN_URL : SIGNUP_URL;
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(formData()),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Something went wrong');
-      } else {
-        // Handle successful login or signup
+    if (props.formType === 'login') {
+      try {
+        // Firebase login logic
+        await signInWithEmailAndPassword(auth, formData().email, formData().password);
+        // Handle successful login, e.g., redirect to another page
+      } catch (error) {
+        setErrorMessage(error.message || 'Something went wrong during login');
       }
-    } catch (error) {
-      setErrorMessage('Network error occurred. Please try again.');
+    } else if (props.formType === 'signup') {
+      try {
+        // Firebase signup logic
+        await createUserWithEmailAndPassword(auth, formData().email, formData().password);
+        // Handle successful signup, e.g., redirect to login or another page
+      } catch (error) {
+        setErrorMessage(error.message || 'Something went wrong during signup');
+      }
     }
     setIsSubmitting(false);
   };
