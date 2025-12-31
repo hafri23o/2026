@@ -55,3 +55,4 @@ const initialRender = () => {
 if (window.isSupportedBrowser !== false) {
   initialRender();
 }
+
