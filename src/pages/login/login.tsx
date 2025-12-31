@@ -17,9 +17,18 @@ const LoginPage = () => {
         localStorage.setItem('userLoggedIn', 'true');
         navigate('/app');  // Redirect to the main app
       })
-      .catch((error) => {
-        setError('Invalid credentials');
-        console.error("Login error: ", error);
+      .catch((err) => {
+        // Display more detailed Firebase error
+        let errorMessage = 'Invalid credentials';
+        if (err.code === 'auth/user-not-found') {
+          errorMessage = 'User not found. Please check your email.';
+        } else if (err.code === 'auth/wrong-password') {
+          errorMessage = 'Incorrect password. Please try again.';
+        } else if (err.code === 'auth/invalid-email') {
+          errorMessage = 'Please enter a valid email address.';
+        }
+        setError(errorMessage);
+        console.error("Login error: ", err);
       });
   };
 
