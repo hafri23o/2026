@@ -170,4 +170,4 @@ export const transformContentToAppData = () => {
 // Get static content data
 export const getStaticContentData = () => {
   return transformContentToAppData()
-} 
+}
