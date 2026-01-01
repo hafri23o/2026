@@ -46,7 +46,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        format: 'es',
+        format: 'es',  // Ensure all output is ES module format
         manualChunks: undefined,
         preferConst: true,
       },
@@ -54,14 +54,16 @@ export default defineConfig({
         {
           name: 'worker-plugin-fix',
           resolveId(id) {
-            if (id.endsWith('?worker')) {
-              return id
+            // Handle the worker import correctly
+            if (id.endsWith('?worker') || id.endsWith('?worker&inline')) {
+              return id;
             }
+            return null;
           },
         },
       ],
       worker: {
-        format: 'es', // Web Workers as ES modules
+        format: 'es', // Ensure the worker format is set to 'es' for proper code splitting
       },
     },
   },
