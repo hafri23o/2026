@@ -1,5 +1,21 @@
+import path from 'node:path';
+import { defineConfig } from 'vite';
+import solidPlugin from 'vite-plugin-solid';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import manifest from './package.json';
+import { mangleClassNames } from './lib/vite-mangle-classnames';
+import { injectScriptsToHtmlDuringBuild } from './lib/vite-inject-scripts-to-html';
+import { serviceWorker } from './lib/vite-service-worker';
+
+const createMScreenshot = (name: string, sizes: string) => ({
+  sizes,
+  src: `/screenshots/${name}.webp`,
+  type: 'image/webp',
+});
+
 export default defineConfig({
-  base: '/',
+  base: '/', // Set base path for GitHub Pages deployment
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
@@ -30,7 +46,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        format: 'es',
+        format: 'es', // Ensure the output is in ES format for compatibility
         manualChunks: undefined,
         preferConst: true,
       },
@@ -38,6 +54,7 @@ export default defineConfig({
         {
           name: 'worker-plugin-fix',
           resolveId(id) {
+            // Make sure to handle worker imports correctly
             if (id.endsWith('?worker')) {
               return id;
             }
