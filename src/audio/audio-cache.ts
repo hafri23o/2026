@@ -35,7 +35,7 @@ const openDB = (): Promise<IDBDatabase> => {
 }
 
 // Add or update an audio entry in the cache
-const cacheAudio = async (url: string, blob: Blob, contentType: string) => {
+const cacheAudio = async (url: string, blob: Blob, contentType: string): Promise<void> => {
   const db = await openDB()
   const transaction = db.transaction(STORE_NAME, 'readwrite')
   const store = transaction.objectStore(STORE_NAME)
@@ -70,7 +70,7 @@ const getCachedAudio = async (url: string): Promise<AudioCacheEntry | undefined>
 }
 
 // Delete audio from the cache by URL
-const deleteCachedAudio = async (url: string) => {
+const deleteCachedAudio = async (url: string): Promise<void> => {
   const db = await openDB()
   const transaction = db.transaction(STORE_NAME, 'readwrite')
   const store = transaction.objectStore(STORE_NAME)
@@ -84,7 +84,7 @@ const deleteCachedAudio = async (url: string) => {
 }
 
 // Clear the entire audio cache
-const clearCache = async () => {
+const clearCache = async (): Promise<void> => {
   const db = await openDB()
   const transaction = db.transaction(STORE_NAME, 'readwrite')
   const store = transaction.objectStore(STORE_NAME)
