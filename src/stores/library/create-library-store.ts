@@ -8,23 +8,35 @@ import {
   MusicItemKey,
 } from '../../types/types'
 
-interface LibraryItemSortState {
+/* =========================================================
+ * Sort-key mapping per entity type
+ * ======================================================= */
+
+type LibraryItemSortState = {
   [MusicItemType.ALBUM]: keyof Album
   [MusicItemType.ARTIST]: keyof Artist
   [MusicItemType.PLAYLIST]: keyof Playlist
   [MusicItemType.HISTORY]: keyof Track
 }
 
-type LibraryItemTypes = keyof LibraryItemSortState
+type LibrarySortableType =
+  | typeof MusicItemType.ALBUM
+  | typeof MusicItemType.ARTIST
+  | typeof MusicItemType.PLAYLIST
+  | typeof MusicItemType.HISTORY
 
 interface State {
   sortKeys: LibraryItemSortState
 }
 
-interface SortOptions<T extends LibraryItemTypes> {
+interface SortOptions<T extends LibrarySortableType> {
   type: T
   key: LibraryItemSortState[T]
 }
+
+/* =========================================================
+ * Store
+ * ======================================================= */
 
 export const createLibraryStore = () => {
   const [state, setState] = createStore<State>({
@@ -36,24 +48,31 @@ export const createLibraryStore = () => {
     },
   })
 
-  const sort = <T extends LibraryItemTypes>(opts: SortOptions<T>) => {
-    setState({
-      sortKeys: {
-        ...state.sortKeys,
-        [opts.type]: opts.key,
-      },
-    })
+  /* =======================================================
+   * Actions
+   * ===================================================== */
+
+  const sort = <T extends LibrarySortableType>({
+    type,
+    key,
+  }: SortOptions<T>) => {
+    setState('sortKeys', type, key)
   }
 
   const actions = {
     sort,
   }
 
+  /* =======================================================
+   * Persistence descriptors
+   * ===================================================== */
+
   const persistedItems = [
     {
       key: 'library-sort',
       selector: () => state.sortKeys,
-      load: (sortKeys: LibraryItemSortState) => setState({ sortKeys }),
+      load: (sortKeys: LibraryItemSortState) =>
+        setState({ sortKeys }),
     },
   ]
 
