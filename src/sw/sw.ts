@@ -1,63 +1,106 @@
-/// <reference lib='WebWorker' />
+/// <reference lib="WebWorker" />
 
-// IMPORTANT! This file cannot use any code also imported
-// in other parts of the app or bundling into single file will fail.
+/**
+ * IMPORTANT:
+ * This file MUST NOT import or share code with the main app.
+ * Vite bundles this as a standalone worker.
+ */
+
 declare const self: ServiceWorkerGlobalScope
 
-// Constants from plugin
+// Injected by the Vite serviceWorker plugin at build time
 declare const ASSETS: string[]
 declare const VERSION: string
 
-export type {}
+export type {} // Ensure this file is treated as a module
 
-self.addEventListener('fetch', (event) => {
-  const respondToRequest = async () => {
-    const { request } = event
-    const url = new URL(request.url)
-
-    if (request.method === 'GET' && self.location.origin === url.origin) {
-      const adjustedRequest =
-        request.mode === 'navigate' ? '/index.html' : request
-
-      return caches
-        .match(adjustedRequest)
-        .then((cachedRequest) => cachedRequest || fetch(request))
-    }
-
-    return fetch(request)
-  }
-
-  event.respondWith(respondToRequest())
-})
+/* ------------------------------------------------------------------ */
+/* Install                                                            */
+/* ------------------------------------------------------------------ */
 
 self.addEventListener('install', (event) => {
-  const addToCachePromise = caches
-    .open(VERSION)
-    .then((cache) => cache.addAll(ASSETS))
+  self.skipWaiting()
 
-  event.waitUntil(addToCachePromise)
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(VERSION)
+      await cache.addAll(ASSETS)
+    })(),
+  )
 })
+
+/* ------------------------------------------------------------------ */
+/* Activate                                                           */
+/* ------------------------------------------------------------------ */
 
 self.addEventListener('activate', (event) => {
-  self.clients.claim()
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys()
 
-  const removePromise = caches.keys().then((keys) => {
-    const promises = keys.map((key) => {
-      if (key === VERSION) {
-        return undefined
-      }
+      await Promise.all(
+        keys.map((key) => {
+          if (key !== VERSION) {
+            return caches.delete(key)
+          }
+          return undefined
+        }),
+      )
 
-      return caches.delete(key)
-    })
-
-    return Promise.all(promises)
-  })
-
-  event.waitUntil(removePromise)
+      await self.clients.claim()
+    })(),
+  )
 })
 
+/* ------------------------------------------------------------------ */
+/* Fetch                                                              */
+/* ------------------------------------------------------------------ */
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event
+
+  // Only handle GET requests
+  if (request.method !== 'GET') {
+    return
+  }
+
+  const url = new URL(request.url)
+
+  // Only cache same-origin requests
+  if (url.origin !== self.location.origin) {
+    return
+  }
+
+  event.respondWith(
+    (async () => {
+      // SPA navigation fallback
+      const cacheKey =
+        request.mode === 'navigate' ? '/index.html' : request
+
+      const cached = await caches.match(cacheKey)
+      if (cached) {
+        return cached
+      }
+
+      const response = await fetch(request)
+
+      // Cache successful responses only
+      if (response.ok) {
+        const cache = await caches.open(VERSION)
+        await cache.put(request, response.clone())
+      }
+
+      return response
+    })(),
+  )
+})
+
+/* ------------------------------------------------------------------ */
+/* Messages                                                           */
+/* ------------------------------------------------------------------ */
+
 self.addEventListener('message', (event) => {
-  if (event.data === 'skip-waiting') {
+  if (event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting()
   }
 })
