@@ -1,111 +1,65 @@
-const headlineMedium = {
-  fontSize: '28px',
-  lineHeight: '36px',
-  letterSpacing: '0',
-  fontWeight: 400,
-}
+/* Typography scale tokens
+ * Static + Vanilla Extract safe
+ */
 
-const headlineSmall = {
-  fontSize: '24px',
-  lineHeight: '32px',
-  letterSpacing: '0',
-  fontWeight: 400,
-}
+export const fontSizes = {
+  headlineMedium: '28px',
+  headlineSmall: '24px',
+  titleLarge: '22px',
+  titleMedium: '16px',
+  titleSmall: '14px',
+  labelLarge: '14px',
+  labelMedium: '12px',
+  labelSmall: '11px',
+  bodyLarge: '16px',
+  bodyMedium: '14px',
+  bodySmall: '12px',
+} as const;
 
-const titleLarge = {
-  fontSize: '22px',
-  lineHeight: '28px',
-  letterSpacing: '0',
-  fontWeight: 500,
-} as const
+export const lineHeight = {
+  headlineMedium: '36px',
+  headlineSmall: '32px',
+  titleLarge: '28px',
+  titleMedium: '24px',
+  titleSmall: '20px',
+  labelLarge: '20px',
+  labelMedium: '16px',
+  labelSmall: '16px',
+  bodyLarge: '24px',
+  bodyMedium: '20px',
+  bodySmall: '16px',
+} as const;
 
-const titleMedium = {
-  fontSize: '16px',
-  lineHeight: '124px',
-  letterSpacing: '0.15px',
-  fontWeight: 500,
-} as const
+export const letterSpacing = {
+  headlineMedium: '0',
+  headlineSmall: '0',
+  titleLarge: '0',
+  titleMedium: '0.15px',
+  titleSmall: '0.1px',
+  labelLarge: '0.1px',
+  labelMedium: '0.5px',
+  labelSmall: '0.5px',
+  bodyLarge: '0.15px',
+  bodyMedium: '0.25px',
+  bodySmall: '0.4px',
+} as const;
 
-const titleSmall = {
-  fontSize: '14px',
-  lineHeight: '20px',
-  letterSpacing: '0.1px',
-  fontWeight: 500,
-} as const
+export const fontWeight = {
+  headlineMedium: 400,
+  headlineSmall: 400,
+  titleLarge: 500,
+  titleMedium: 500,
+  titleSmall: 500,
+  labelLarge: 500,
+  labelMedium: 500,
+  labelSmall: 500,
+  bodyLarge: 400,
+  bodyMedium: 400,
+  bodySmall: 400,
+} as const;
 
-const labelLarge = {
-  fontSize: '14px',
-  lineHeight: '20px',
-  letterSpacing: '0.1px',
-  fontWeight: 500,
-} as const
+/* Shared token type (optional but useful) */
+export type TypographyToken = keyof typeof fontSizes;
 
-const labelMedium = {
-  fontSize: '12px',
-  lineHeight: '16px',
-  letterSpacing: '0.5px',
-  fontWeight: 500,
-} as const
-
-const labelSmall = {
-  fontSize: '11px',
-  lineHeight: '16px',
-  letterSpacing: '0.5px',
-  fontWeight: 500,
-} as const
-
-const bodyLarge = {
-  fontSize: '16px',
-  lineHeight: '24px',
-  letterSpacing: '0.15px',
-  fontWeight: 400,
-} as const
-
-const bodyMedium = {
-  fontSize: '14px',
-  lineHeight: '20px',
-  letterSpacing: '0.25px',
-  fontWeight: 400,
-} as const
-
-const bodySmall = {
-  fontSize: '12px',
-  lineHeight: '16px',
-  letterSpacing: '0.4px',
-  fontWeight: 400,
-} as const
-
-const styles = {
-  headlineMedium,
-  headlineSmall,
-  titleLarge,
-  titleMedium,
-  titleSmall,
-  labelLarge,
-  labelMedium,
-  labelSmall,
-  bodyLarge,
-  bodyMedium,
-  bodySmall,
-} as const
-
-type Styles = typeof styles
-type StylesKeys = keyof Styles
-
-const styleEntries = Object.entries(styles)
-
-type SplitStyles<T> = {
-  [key in StylesKeys]: T
-}
-
-export const fontSizes = Object.fromEntries(
-  styleEntries.map(([name, value]) => [name, value.fontSize]),
-) as SplitStyles<string>
-
-export const letterSpacing = Object.fromEntries(
-  styleEntries.map(([name, value]) => [name, value.letterSpacing]),
-) as SplitStyles<string>
-
-export const fontWeight = Object.fromEntries(
-  styleEntries.map(([name, value]) => [name, value.fontWeight]),
-) as SplitStyles<number>
+/* isolatedModules safety */
+export {};
