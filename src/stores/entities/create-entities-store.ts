@@ -1,8 +1,10 @@
 import { batch } from 'solid-js'
 import { createStore, produce, SetStoreFunction } from 'solid-js/store'
 import { nanoid } from 'nanoid'
+
 import { getFilesFromDirectory } from '../../helpers/file-system'
 import { tracksParser } from '../../helpers/tracks-file-parser/tracks-file-parser'
+
 import {
   Track,
   Album,
@@ -12,28 +14,29 @@ import {
   UnknownTrack,
   FileWrapper,
 } from '../../types/types'
+
 import { UNKNOWN_ITEM_ID } from '../../types/constants'
 import { createPlaylistsActions } from './create-playlists-actions'
 import { toast } from '~/components/toast/toast'
 import { getStaticContentData } from '../../content/content-adapter'
 
+/* =========================================================
+ * State
+ * ======================================================= */
+
 export interface State {
-  tracks: {
-    [trackId: string]: Track
-  }
-  albums: {
-    [albumId: string]: Album
-  }
-  artists: {
-    [artistId: string]: Artist
-  }
-  playlists: {
-    [playlistId: string]: Playlist
-  }
+  tracks: Record<string, Track>
+  albums: Record<string, Album>
+  artists: Record<string, Artist>
+  playlists: Record<string, Playlist>
   favorites: string[]
 }
 
 export type SetState = SetStoreFunction<State>
+
+/* =========================================================
+ * Store
+ * ======================================================= */
 
 export const createEntitiesStore = () => {
   const [state, setState] = createStore<State>({
@@ -46,10 +49,14 @@ export const createEntitiesStore = () => {
 
   const playlistsActions = createPlaylistsActions(setState)
 
-  // Load static content data on initialization
+  /* =======================================================
+   * Static content
+   * ===================================================== */
+
   const loadStaticContent = () => {
     try {
       const staticData = getStaticContentData()
+
       batch(() => {
         setState('tracks', staticData.tracks)
         setState('albums', staticData.albums)
@@ -57,7 +64,6 @@ export const createEntitiesStore = () => {
         setState('playlists', staticData.playlists)
         setState('favorites', staticData.favorites)
       })
-      console.log('Static content loaded successfully')
     } catch (error) {
       console.error('Error loading static content:', error)
       toast({
@@ -67,144 +73,155 @@ export const createEntitiesStore = () => {
     }
   }
 
-  // Load content immediately
   loadStaticContent()
 
-  const removeTracks = (trackIds: readonly string[]) => {
-    batch(() => {
-      for (const trackId of trackIds) {
-        const track = state.tracks[trackId]
-
-        if (track) {
-          const filterIds = (ids: readonly string[]) =>
-            ids.filter((id) => id !== trackId)
-
-          const filterIdsParams = ['trackIds', filterIds] as const
-
-          setState('tracks', trackId, undefined as unknown as Track)
-          setState('albums', track.album || UNKNOWN_ITEM_ID, ...filterIdsParams)
-
-          for (const artistId of track.artists || [UNKNOWN_ITEM_ID]) {
-            setState('artists', artistId, ...filterIdsParams)
-          }
-
-          setState('favorites', filterIds)
-        }
-      }
-
-      for (const playlist of Object.values(state.playlists)) {
-        const filteredIds = playlist.trackIds.filter(
-          (id) => !trackIds.includes(id),
-        )
-        setState('playlists', playlist.id, 'trackIds', filteredIds)
-      }
-    })
-  }
+  /* =======================================================
+   * Helpers
+   * ===================================================== */
 
   const fileEquals = async (
-    fileWrapperA: FileWrapper,
-    fileWrapperB: FileWrapper,
-  ) => {
-    if (fileWrapperA.type === 'fileRef' && fileWrapperB.type === 'fileRef') {
-      const fileA = fileWrapperA.file
-      const fileB = fileWrapperB.file
-
-      return fileA.name === fileB.name && fileA.isSameEntry(fileB)
+    a: FileWrapper,
+    b: FileWrapper,
+  ): Promise<boolean> => {
+    if (a.kind === 'fileRef' && b.kind === 'fileRef') {
+      return a.file.name === b.file.name && a.file.isSameEntry(b.file)
     }
 
-    if (fileWrapperA.type === 'file' && fileWrapperB.type === 'file') {
-      const fileA = fileWrapperA.file
-      const fileB = fileWrapperB.file
-
-      // There is no good way to compare two files.
-      return fileA.name === fileB.name && fileA.size === fileB.size
+    if (a.kind === 'file' && b.kind === 'file') {
+      return a.file.name === b.file.name && a.file.size === b.file.size
     }
 
     return false
   }
 
-  const filterExistingTracks = async (newTracks: readonly UnknownTrack[]) => {
+  const filterExistingTracks = async (
+    newTracks: readonly UnknownTrack[],
+  ): Promise<UnknownTrack[]> => {
     const existingTracks = Object.values(state.tracks)
+    const unique: UnknownTrack[] = []
 
-    const uniqueTracks: UnknownTrack[] = []
-    for await (const newTrack of newTracks) {
-      let foundTrackIndex = -1
-      let i = 0
-      for await (const existingTrack of existingTracks) {
-        if (await fileEquals(newTrack.fileWrapper, existingTrack.fileWrapper)) {
-          foundTrackIndex = i
+    for (const newTrack of newTracks) {
+      let foundIndex = -1
+
+      for (let i = 0; i < existingTracks.length; i += 1) {
+        if (
+          await fileEquals(
+            newTrack.fileWrapper,
+            existingTracks[i].fileWrapper,
+          )
+        ) {
+          foundIndex = i
           break
         }
-        i += 1
       }
 
-      if (foundTrackIndex === -1) {
-        uniqueTracks.push(newTrack)
+      if (foundIndex === -1) {
+        unique.push(newTrack)
       } else {
-        existingTracks.splice(foundTrackIndex, 1)
+        existingTracks.splice(foundIndex, 1)
       }
     }
 
-    return uniqueTracks
+    return unique
+  }
+
+  /* =======================================================
+   * Mutations
+   * ===================================================== */
+
+  const removeTracks = (trackIds: readonly string[]) => {
+    batch(() => {
+      for (const trackId of trackIds) {
+        const track = state.tracks[trackId]
+        if (!track) continue
+
+        const filterIds = (ids: readonly string[]) =>
+          ids.filter((id) => id !== trackId)
+
+        setState('tracks', trackId, undefined)
+
+        setState(
+          'albums',
+          track.album ?? UNKNOWN_ITEM_ID,
+          'trackIds',
+          filterIds,
+        )
+
+        for (const artistId of track.artists ?? [UNKNOWN_ITEM_ID]) {
+          setState('artists', artistId, 'trackIds', filterIds)
+        }
+
+        setState('favorites', filterIds)
+      }
+
+      for (const playlist of Object.values(state.playlists)) {
+        setState(
+          'playlists',
+          playlist.id,
+          'trackIds',
+          playlist.trackIds.filter((id) => !trackIds.includes(id)),
+        )
+      }
+    })
   }
 
   const addNewTracks = async (tracks: readonly UnknownTrack[]) => {
-    const newTracks = await filterExistingTracks(tracks)
+    const uniqueTracks = await filterExistingTracks(tracks)
 
     setState(
       produce((s) => {
-        for (const track of newTracks) {
+        for (const track of uniqueTracks) {
           const id = nanoid()
-          s.tracks[id] = <Track>{
+          s.tracks[id] = {
             ...track,
             id,
             type: MusicItemType.TRACK,
           }
         }
 
-        const { albums } = s
-        const { artists } = s
-
         for (const track of Object.values(s.tracks)) {
-          const trackArtists = track.artists
           const trackId = track.id
-
-          // Albums and Artists names and ids are the same.
           const albumId = track.album ?? UNKNOWN_ITEM_ID
 
-          const album = (albums[albumId] ||= {
-            type: MusicItemType.ALBUM,
-            id: albumId,
-            name: albumId,
-            artists: [],
-            trackIds: [],
-          })
+          const album =
+            s.albums[albumId] ??
+            (s.albums[albumId] = {
+              type: MusicItemType.ALBUM,
+              id: albumId,
+              name: albumId,
+              artists: [],
+              trackIds: [],
+            })
 
           if (albumId !== UNKNOWN_ITEM_ID) {
-            // The preveous tracks might not have had these values.
-            album.image ||= track.image
-            album.year ||= track.year
+            album.image ??= track.image
+            album.year ??= track.year
           }
 
           if (!album.trackIds.includes(trackId)) {
             album.trackIds.push(trackId)
           }
 
-          for (const artist of trackArtists) {
+          for (const artist of track.artists) {
             if (!album.artists.includes(artist)) {
               album.artists.push(artist)
             }
           }
 
-          const artistsNames =
-            trackArtists.length > 0 ? trackArtists : [UNKNOWN_ITEM_ID]
-          for (const artistId of artistsNames) {
-            const artist = (artists[artistId] ||= {
-              type: MusicItemType.ARTIST,
-              id: artistId,
-              name: artistId,
-              trackIds: [],
-            })
+          const artistNames =
+            track.artists.length > 0
+              ? track.artists
+              : [UNKNOWN_ITEM_ID]
+
+          for (const artistId of artistNames) {
+            const artist =
+              s.artists[artistId] ??
+              (s.artists[artistId] = {
+                type: MusicItemType.ARTIST,
+                id: artistId,
+                name: artistId,
+                trackIds: [],
+              })
 
             if (!artist.trackIds.includes(trackId)) {
               artist.trackIds.push(trackId)
@@ -214,6 +231,10 @@ export const createEntitiesStore = () => {
       }),
     )
   }
+
+  /* =======================================================
+   * Import
+   * ===================================================== */
 
   const importTracks = async () => {
     const files = await getFilesFromDirectory([
@@ -226,71 +247,55 @@ export const createEntitiesStore = () => {
       'opus',
     ])
 
-    // User canceled directory picker.
-    if (!files) {
-      return
-    }
-
-    if (files.length < 1) {
-      toast({
-        message: 'Selected directory does not contain any tracks.',
-      })
+    if (!files || files.length === 0) {
+      toast({ message: 'Selected directory does not contain any tracks.' })
       return
     }
 
     const toastID = nanoid()
-    const baseToastOptions = {
-      id: toastID,
-      duration: false,
-    } as const
 
     toast({
-      ...baseToastOptions,
-      message: 'Preparing to import tracks to the library.',
+      id: toastID,
+      duration: false,
+      message: 'Preparing to import tracks.',
       controls: false,
     })
 
     try {
-      const newTracks = await tracksParser(
-        files,
-        (successfullyImportedCount) => {
-          toast({
-            ...baseToastOptions,
-            message: `Importing tracks to the library. ${successfullyImportedCount} of ${files.length}`,
-            controls: 'spinner',
-          })
-        },
-      )
+      const newTracks = await tracksParser(files, (count) => {
+        toast({
+          id: toastID,
+          duration: false,
+          message: `Importing tracks ${count} / ${files.length}`,
+          controls: 'spinner',
+        })
+      })
 
       batch(() => {
         addNewTracks(newTracks)
         toast({
-          ...baseToastOptions,
-          message: `Successfully imported or updated ${newTracks.length} tracks to the library.`,
+          id: toastID,
           duration: 8000,
-          controls: undefined,
+          message: `Successfully imported ${newTracks.length} tracks.`,
         })
       })
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error(error)
       toast({
-        ...baseToastOptions,
-        message:
-          'An unknown error has occurred while importing tracks to the library.',
-        controls: undefined,
+        id: toastID,
+        message: 'An error occurred while importing tracks.',
       })
     }
   }
 
   const clearData = () => {
-    toast({
-      message: 'Library cleared',
-    })
+    toast({ message: 'Library cleared' })
     setState({
       tracks: {},
       albums: {},
       artists: {},
       playlists: {},
+      favorites: [],
     })
   }
 
@@ -305,14 +310,20 @@ export const createEntitiesStore = () => {
     } as const
 
     const path = pathMap[type]
+    const item = state[path][id]
 
-    setState(path, id, undefined as unknown as Album)
+    if (!item) return
 
     if (path !== 'playlists') {
-      const ids = state[path][id].trackIds
-      removeTracks(ids)
+      removeTracks(item.trackIds)
     }
+
+    setState(path, id, undefined)
   }
+
+  /* =======================================================
+   * Public API
+   * ===================================================== */
 
   const actions = {
     ...playlistsActions,
