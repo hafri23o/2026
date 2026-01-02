@@ -1,21 +1,33 @@
-interface FileLegacy {
-  type: 'file'
-  file: File
+/* =========================================================
+ * File wrappers
+ * ======================================================= */
+
+export interface FileLegacy {
+  readonly kind: 'file'
+  readonly file: File
 }
 
-interface FileHandle {
-  type: 'fileRef'
-  file: FileSystemFileHandle
+export interface FileHandle {
+  readonly kind: 'fileRef'
+  readonly file: FileSystemFileHandle
 }
 
-interface FileUrl {
-  type: 'url'
-  url: string
+export interface FileUrl {
+  readonly kind: 'url'
+  readonly url: string
 }
 
 export type FileWrapper = FileLegacy | FileHandle | FileUrl
 
+/* =========================================================
+ * Media / image helpers
+ * ======================================================= */
+
 export type ImageType = Blob | string | undefined
+
+/* =========================================================
+ * Music item enums (const-safe for ESNext + strict)
+ * ======================================================= */
 
 export const MusicItemType = {
   TRACK: 0,
@@ -25,7 +37,8 @@ export const MusicItemType = {
   HISTORY: 4,
 } as const
 
-export type MusicItemType = typeof MusicItemType[keyof typeof MusicItemType]
+export type MusicItemType =
+  (typeof MusicItemType)[keyof typeof MusicItemType]
 
 export const MusicItemKey = {
   NAME: 'name',
@@ -36,53 +49,74 @@ export const MusicItemKey = {
   DATE_CREATED: 'dateCreated',
 } as const
 
-export type MusicItemKey = typeof MusicItemKey[keyof typeof MusicItemKey]
+export type MusicItemKey =
+  (typeof MusicItemKey)[keyof typeof MusicItemKey]
+
+/* =========================================================
+ * Base models
+ * ======================================================= */
 
 export interface BaseMusicItem {
-  id: string
-  type: MusicItemType
-  name: string
-}
-
-export interface UnknownTrack {
-  name: string
-  album?: string
-  artists: string[]
-  year?: string
-  duration: number
-  genre: string[]
-  trackNo?: number
-  trackOf?: number
-  image?: ImageType
-  fileWrapper: FileWrapper
-  primaryColor?: number
-  description?: string
-  topics?: string[]
-}
-
-export interface Track extends BaseMusicItem, UnknownTrack {
-  type: typeof MusicItemType.TRACK
+  readonly id: string
+  readonly type: MusicItemType
+  readonly name: string
 }
 
 export interface BaseMusicItemWithTrackIds extends BaseMusicItem {
-  trackIds: string[]
+  readonly trackIds: readonly string[]
 }
 
-// For Album and Artists id and name are the same thing,
-// but for consistency still include both.
+/* =========================================================
+ * Track models
+ * ======================================================= */
+
+export interface UnknownTrack {
+  readonly name: string
+  readonly album?: string
+  readonly artists: readonly string[]
+  readonly year?: string
+  readonly duration: number
+  readonly genre: readonly string[]
+  readonly trackNo?: number
+  readonly trackOf?: number
+  readonly image?: ImageType
+  readonly fileWrapper: FileWrapper
+  readonly primaryColor?: number
+  readonly description?: string
+  readonly topics?: readonly string[]
+}
+
+export interface Track extends BaseMusicItem, UnknownTrack {
+  readonly type: typeof MusicItemType.TRACK
+}
+
+/* =========================================================
+ * Collection models
+ * ======================================================= */
+
 export interface Album extends BaseMusicItemWithTrackIds {
-  type: typeof MusicItemType.ALBUM
-  artists: string[]
-  year?: string
-  image?: ImageType
-  description?: string
+  readonly type: typeof MusicItemType.ALBUM
+  readonly artists: readonly string[]
+  readonly year?: string
+  readonly image?: ImageType
+  readonly description?: string
 }
 
 export interface Artist extends BaseMusicItemWithTrackIds {
-  type: typeof MusicItemType.ARTIST
+  readonly type: typeof MusicItemType.ARTIST
 }
 
 export interface Playlist extends BaseMusicItemWithTrackIds {
-  type: typeof MusicItemType.PLAYLIST
-  dateCreated: number
+  readonly type: typeof MusicItemType.PLAYLIST
+  readonly dateCreated: number
 }
+
+/* =========================================================
+ * Union helpers
+ * ======================================================= */
+
+export type MusicItem =
+  | Track
+  | Album
+  | Artist
+  | Playlist
