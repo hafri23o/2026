@@ -1,18 +1,28 @@
-import { toggleReverseArray } from '../../utils'
+import { toggleReverseArray } from '~/utils'
 
+/**
+ * Fade animation helper using the Web Animations API.
+ * Compatible with ESNext + strict TypeScript.
+ */
 export const animateFade = (
   element: Element,
   fadeOut: boolean,
   options: KeyframeAnimationOptions,
-): Animation =>
-  element.animate(
-    {
-      opacity: toggleReverseArray([0, 1], fadeOut),
-    },
-    options,
-  )
+): Animation => {
+  const keyframes: PropertyIndexedKeyframes = {
+    opacity: toggleReverseArray([0, 1], fadeOut),
+  }
 
+  return element.animate(keyframes, options)
+}
+
+/**
+ * No-op animation helper.
+ * Useful for preserving animation pipelines.
+ */
 export const animateEmpty = (
   element: Element,
   options: number | KeyframeAnimationOptions,
-) => element.animate(null, options)
+): Animation => {
+  return element.animate([], options)
+}
