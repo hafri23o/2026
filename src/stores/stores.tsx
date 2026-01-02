@@ -1,52 +1,87 @@
 import { createContext, ParentComponent, useContext } from 'solid-js'
-import { createEntitiesStore } from './entities/create-entities-store'
-import { createLibraryStore } from './library/create-library-store'
-import { createPlayerStore } from './player/create-player-store'
-import { PersistStoresProvider, PersistStoresProps } from './persist-stores'
 
+import { createEntitiesStore } from '~/stores/entities/create-entities-store'
+import { createLibraryStore } from '~/stores/library/create-library-store'
+import { createPlayerStore } from '~/stores/player/create-player-store'
+import {
+  PersistStoresProvider,
+  PersistStoresProps,
+} from '~/stores/persist-stores'
+
+/**
+ * Generic helper to create a strongly typed Solid context store
+ * compatible with strict TypeScript settings.
+ */
 function createStoreCtx<T>(createStoreFn: () => T) {
-  const StoreContext = createContext<T>()
+  const StoreContext = createContext<T | undefined>(undefined)
 
   const Provider: ParentComponent = (props) => {
-    const state = createStoreFn()
+    const store = createStoreFn()
+
     return (
-      <StoreContext.Provider value={state}>
+      <StoreContext.Provider value={store}>
         {props.children}
       </StoreContext.Provider>
     )
   }
 
-  const useStateContext = () => useContext(StoreContext) as T
+  const useStore = (): T => {
+    const ctx = useContext(StoreContext)
+    if (!ctx) {
+      throw new Error(
+        'Store context was used outside of its corresponding Provider',
+      )
+    }
+    return ctx
+  }
 
-  return [Provider, useStateContext] as const
+  return [Provider, useStore] as const
 }
 
-const [EntitiesProvider, useEntitiesStore] = createStoreCtx(createEntitiesStore)
-const [LibraryProvider, useLibraryStore] = createStoreCtx(createLibraryStore)
-const [PlayerProvider, usePlayerStore] = createStoreCtx(createPlayerStore)
+/* ------------------------------------------------------------------ */
+/* Stores                                                             */
+/* ------------------------------------------------------------------ */
+
+const [EntitiesProvider, useEntitiesStore] =
+  createStoreCtx(createEntitiesStore)
+
+const [LibraryProvider, useLibraryStore] =
+  createStoreCtx(createLibraryStore)
+
+const [PlayerProvider, usePlayerStore] =
+  createStoreCtx(createPlayerStore)
 
 export { useEntitiesStore, useLibraryStore, usePlayerStore }
 
-// Only change version if there are breaking changes
-// with persisted data. Changing version number
-// will delete all previous storages.
+/* ------------------------------------------------------------------ */
+/* Persistence setup                                                   */
+/* ------------------------------------------------------------------ */
+
+// ⚠️ Only change when persisted data structure changes
 const APP_STORAGE_VERSION = 1
 const APP_STORAGE_NAME = 'APP_DATA'
 
 export const RootStoresProvider: ParentComponent<
   Pick<PersistStoresProps, 'onLoad'>
-> = (props) => (
-  <EntitiesProvider>
-    <LibraryProvider>
-      <PlayerProvider>
-        <PersistStoresProvider
-          storageName={APP_STORAGE_NAME}
-          version={APP_STORAGE_VERSION}
-          useStores={[useEntitiesStore, useLibraryStore, usePlayerStore]}
-        >
-          {props.children}
-        </PersistStoresProvider>
-      </PlayerProvider>
-    </LibraryProvider>
-  </EntitiesProvider>
-)
+> = (props) => {
+  return (
+    <EntitiesProvider>
+      <LibraryProvider>
+        <PlayerProvider>
+          <PersistStoresProvider
+            storageName={APP_STORAGE_NAME}
+            version={APP_STORAGE_VERSION}
+            useStores={[
+              useEntitiesStore,
+              useLibraryStore,
+              usePlayerStore,
+            ]}
+            onLoad={props.onLoad}
+          >
+            {props.children}
+          </PersistStoresProvider>
+        </PlayerProvider>
+      </LibraryProvider>
+    </EntitiesProvider>
+  )
+}
