@@ -1,11 +1,8 @@
-import { createEffect, useContext, createResource, untrack, onCleanup, createComputed, batch } from 'solid-js'
-import { usePlayerStore } from '~/stores/stores' // Adjusted to use ~ alias
-import { RepeatState } from '~/stores/player/create-player-store' // Adjusted to use ~ alias
-import { isEventMeantForTextInput } from '~/utils' // Adjusted to use ~ alias
-import { KeyboardCode } from '~/utils/key-codes' // Adjusted to use ~ alias
-import { MusicImagesContext } from '~/components/music-image/data-context' // Adjusted to use ~ alias
-import { toast } from '~/components/toast/toast' // Adjusted to use ~ alias
-import { getCachedAudio } from '~/utils/audio-cache' // Adjusted to use ~ alias
+import { createEffect, createComputed, onCleanup } from 'solid-js'
+import { usePlayerStore } from '~/stores/stores' // Path alias correctly used
+import { toast } from '~/components/toast/toast' // Path alias correctly used
+import { getCachedAudio, cacheAudio } from '~/utils/audio-cache' // Added cacheAudio import
+import { MusicImagesContext } from '~/components/music-image/data-context' // Path alias correctly used
 
 const toastPlayerError = () => {
   toast({
@@ -29,9 +26,11 @@ export const createAudioPlayer = (track: string) => {
       if (cachedAudio) {
         audioBlob = cachedAudio.blob
       } else {
-        // Fetch audio from network if not in cache
+        // Fetch audio from the network if not cached
         const response = await fetch(url)
         audioBlob = await response.blob()
+
+        // Cache the audio after fetching it from the network
         await cacheAudio(url, audioBlob, response.headers.get('Content-Type') || 'audio/mp3')
       }
 
@@ -42,17 +41,19 @@ export const createAudioPlayer = (track: string) => {
         toastPlayerError()
       }
     } catch (error) {
+      console.error(error) // Optionally log error
       toastPlayerError()
     }
   }
 
-  // When track changes, play new track
+  // Whenever the track changes, play the new track
   createEffect(() => {
     if (track) {
       playTrack(track)
     }
   })
 
+  // Sync audio player with store state (whether it's playing or paused)
   createComputed(() => {
     if (playerStore.isPlaying) {
       audio.play()
@@ -61,6 +62,7 @@ export const createAudioPlayer = (track: string) => {
     }
   })
 
+  // Cleanup the audio when done
   onCleanup(() => {
     audio.pause()
     audio.src = ''
