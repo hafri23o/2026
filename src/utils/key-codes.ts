@@ -10,5 +10,6 @@ export const KeyboardCode = {
   N: 'KeyN',
   M: 'KeyM',
   T: 'KeyT',
-}
-export type KeyboardCode = typeof KeyboardCode[keyof typeof KeyboardCode]
+} as const;
+
+export type KeyboardCode = keyof typeof KeyboardCode;
