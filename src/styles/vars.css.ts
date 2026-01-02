@@ -2,10 +2,19 @@ import {
   assignVars,
   createGlobalTheme,
   createThemeContract,
-} from '@vanilla-extract/css'
-import { getAppTheme, argbFromHex } from '../helpers/app-theme'
+} from '@vanilla-extract/css';
 
-const root = 'html'
+import { getAppTheme, argbFromHex } from '../helpers/app-theme';
+
+/* -------------------------------------------------------------------------- */
+/* Root selector                                                              */
+/* -------------------------------------------------------------------------- */
+
+const ROOT_SELECTOR = ':root';
+
+/* -------------------------------------------------------------------------- */
+/* Color contract (static + type-safe)                                         */
+/* -------------------------------------------------------------------------- */
 
 export const colorsTheme = createThemeContract({
   primary: null,
@@ -35,39 +44,50 @@ export const colorsTheme = createThemeContract({
   inverseSurface: null,
   inverseOnSurface: null,
   inversePrimary: null,
-})
+});
 
-const DEFAULT_THEME_SEED = argbFromHex('#ffdcc4')
+/* -------------------------------------------------------------------------- */
+/* Default themes                                                             */
+/* -------------------------------------------------------------------------- */
+
+const DEFAULT_THEME_SEED = argbFromHex('#ffdcc4');
 
 export const defaultDarkTheme = assignVars(
   colorsTheme,
   getAppTheme(DEFAULT_THEME_SEED, true),
-)
+);
 
 export const defaultLightTheme = assignVars(
   colorsTheme,
   getAppTheme(DEFAULT_THEME_SEED, false),
-)
+);
 
-const colors = {
-  ...colorsTheme,
-}
+/* -------------------------------------------------------------------------- */
+/* Global size tokens                                                         */
+/* -------------------------------------------------------------------------- */
 
-const playerSizeVars = createGlobalTheme(root, {
-  // padding-bottom 16 + contronls-height: 44px + gap 8px + timeline 24px + padding-top 8px
+export const playerSizeVars = createGlobalTheme(ROOT_SELECTOR, {
+  // padding-bottom 16 + controls-height 44 + gap 8 + timeline 24 + padding-top 8
   playerCardHeight: '100px',
-})
+});
 
-const sizesVars = createGlobalTheme(root, {
+export const layoutSizeVars = createGlobalTheme(ROOT_SELECTOR, {
   maxContentWidth: '2144px',
   headerHeight: '56px',
   playerCardOffset: `calc(${playerSizeVars.playerCardHeight} + 16px)`,
-})
+});
+
+/* -------------------------------------------------------------------------- */
+/* Public vars object                                                         */
+/* -------------------------------------------------------------------------- */
 
 export const vars = {
-  colors,
+  colors: colorsTheme,
   sizes: {
     ...playerSizeVars,
-    ...sizesVars,
+    ...layoutSizeVars,
   },
-}
+};
+
+/* isolatedModules safety */
+export {};
