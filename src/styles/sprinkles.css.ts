@@ -1,9 +1,13 @@
 import {
   createSprinkles,
   defineProperties,
-} from '@vanilla-extract/sprinkles'
-import { vars } from './vars.css'
-import * as typographyAtomValues from './typography-properties.css'
+} from '@vanilla-extract/sprinkles';
+import { vars } from './vars.css';
+import * as typographyAtomValues from './typography-properties.css';
+
+/* ───────────────────────────
+ * Color tokens
+ * ─────────────────────────── */
 
 const surfaceColors = {
   primary: vars.colors.primary,
@@ -17,7 +21,7 @@ const surfaceColors = {
   surface: vars.colors.surface,
   surfaceVariant: vars.colors.surfaceVariant,
   inverseSurface: vars.colors.inverseSurface,
-}
+} as const;
 
 const contentColors = {
   primary: vars.colors.primary,
@@ -35,7 +39,7 @@ const contentColors = {
   onSurface: vars.colors.onSurface,
   onSurfaceVariant: vars.colors.onSurfaceVariant,
   inverseOnSurface: vars.colors.inverseOnSurface,
-}
+} as const;
 
 const colorProperties = defineProperties({
   properties: {
@@ -45,7 +49,11 @@ const colorProperties = defineProperties({
   shorthands: {
     surface: ['backgroundColor'],
   },
-})
+});
+
+/* ───────────────────────────
+ * Typography
+ * ─────────────────────────── */
 
 const typographyProperties = defineProperties({
   properties: {
@@ -56,75 +64,82 @@ const typographyProperties = defineProperties({
   shorthands: {
     typography: ['fontSize', 'letterSpacing', 'fontWeight'],
   },
-})
+});
 
-const paddingSize = {
+/* ───────────────────────────
+ * Spacing
+ * ─────────────────────────── */
+
+const spacingSize = {
   '4px': '4px',
   '8px': '8px',
   '16px': '16px',
   '24px': '24px',
-}
+} as const;
+
 const paddingProperties = defineProperties({
   properties: {
-    paddingTop: paddingSize,
-    paddingBottom: paddingSize,
-    paddingLeft: paddingSize,
-    paddingRight: paddingSize,
-    padding: paddingSize,
+    paddingTop: spacingSize,
+    paddingBottom: spacingSize,
+    paddingLeft: spacingSize,
+    paddingRight: spacingSize,
+    padding: spacingSize,
   },
   shorthands: {
     paddingX: ['paddingLeft', 'paddingRight'],
     paddingY: ['paddingTop', 'paddingBottom'],
   },
-})
+});
 
-const RADIUS_SIZE = {
+const radiusSize = {
   '4px': '4px',
   '8px': '8px',
   '12px': '12px',
   '24px': '24px',
-}
+} as const;
 
 const radiusProperties = defineProperties({
   properties: {
-    borderRadius: RADIUS_SIZE,
+    borderRadius: radiusSize,
   },
   shorthands: {
     radius: ['borderRadius'],
   },
-})
+});
 
-const gapSize = {
-  '4px': '4px',
-  '8px': '8px',
-  '16px': '16px',
-  '24px': '24px',
-}
 const gapProperties = defineProperties({
   properties: {
-    rowGap: gapSize,
-    columnGap: gapSize,
+    rowGap: spacingSize,
+    columnGap: spacingSize,
   },
   shorthands: {
-    gap: ['columnGap', 'rowGap'],
+    gap: ['rowGap', 'columnGap'],
   },
-})
+});
 
-const tonalElavation = {
-  1: `linear-gradient(0deg, rgba(${vars.colors.primaryRgb}, 5%) 0%, rgba(${vars.colors.primaryRgb}, 5%) 0%)`,
-  2: `linear-gradient(0deg, rgba(${vars.colors.primaryRgb}, 8%) 0%, rgba(${vars.colors.primaryRgb}, 8%) 0%)`,
-  3: `linear-gradient(0deg, rgba(${vars.colors.primaryRgb}, 11%) 0%, rgba(${vars.colors.primaryRgb}, 11%) 0%)`,
-  4: `linear-gradient(0deg, rgba(${vars.colors.primaryRgb}, 12%) 0%, rgba(${vars.colors.primaryRgb}, 12%) 0%)`,
-}
+/* ───────────────────────────
+ * Tonal elevation (Material-style)
+ * ─────────────────────────── */
 
-const tonalElavationProperties = defineProperties({
+const tonalElevation = {
+  '1': `linear-gradient(0deg, rgba(${vars.colors.primaryRgb}, 5%) 0%, rgba(${vars.colors.primaryRgb}, 5%) 0%)`,
+  '2': `linear-gradient(0deg, rgba(${vars.colors.primaryRgb}, 8%) 0%, rgba(${vars.colors.primaryRgb}, 8%) 0%)`,
+  '3': `linear-gradient(0deg, rgba(${vars.colors.primaryRgb}, 11%) 0%, rgba(${vars.colors.primaryRgb}, 11%) 0%)`,
+  '4': `linear-gradient(0deg, rgba(${vars.colors.primaryRgb}, 12%) 0%, rgba(${vars.colors.primaryRgb}, 12%) 0%)`,
+} as const;
+
+const tonalElevationProperties = defineProperties({
   properties: {
-    backgroundImage: tonalElavation,
+    backgroundImage: tonalElevation,
   },
   shorthands: {
     tonalElevation: ['backgroundImage'],
   },
-})
+});
+
+/* ───────────────────────────
+ * Common layout utilities
+ * ─────────────────────────── */
 
 const commonProperties = defineProperties({
   properties: {
@@ -143,7 +158,11 @@ const commonProperties = defineProperties({
     flexShrink: [0, 1],
     overflow: ['hidden', 'auto'],
   },
-})
+});
+
+/* ───────────────────────────
+ * Sprinkles export
+ * ─────────────────────────── */
 
 export const sprinkles = createSprinkles(
   commonProperties,
@@ -151,6 +170,10 @@ export const sprinkles = createSprinkles(
   radiusProperties,
   gapProperties,
   typographyProperties,
-  tonalElavationProperties,
+  tonalElevationProperties,
   colorProperties,
-)
+);
+
+/* isolatedModules compatibility */
+export type Sprinkles = Parameters<typeof sprinkles>[0];
+export {};
