@@ -2,53 +2,70 @@ import { nanoid } from 'nanoid'
 import { Playlist, MusicItemType } from '../../types/types'
 import { SetState } from './create-entities-store'
 
+/* =========================================================
+ * Helpers
+ * ======================================================= */
+
+const mergeToUniqueArray = <T>(
+  a: readonly T[],
+  b: readonly T[],
+): T[] => {
+  return Array.from(new Set<T>([...a, ...b]))
+}
+
+/* =========================================================
+ * Playlist actions
+ * ======================================================= */
+
 export const createPlaylistsActions = (setState: SetState) => {
-  const createNewPlaylist = (name: string, trackIds: string[] = []) => {
+  const createNewPlaylist = (
+    name: string,
+    trackIds: readonly string[] = [],
+  ) => {
+    const id = nanoid()
+
     const newPlaylist: Playlist = {
       type: MusicItemType.PLAYLIST,
-      id: nanoid(),
+      id,
       name,
-      dateCreated: new Date().getTime(),
-      trackIds,
+      dateCreated: Date.now(),
+      trackIds: [...trackIds],
     }
 
-    setState('playlists', newPlaylist.id, newPlaylist)
+    setState('playlists', id, newPlaylist)
   }
 
   const renamePlaylist = (id: string, name: string) => {
     setState('playlists', id, 'name', name)
   }
 
-  const mergeToUniqueArray = <T>(a: readonly T[], b: readonly T[]): T[] => {
-    const uniqueItemsSet = new Set([...a, ...b])
-    return [...uniqueItemsSet]
-  }
-
   const addTracksToPlaylist = (
     playlistId: string,
-    tracksIds: readonly string[],
+    trackIds: readonly string[],
   ) => {
-    setState('playlists', playlistId, 'trackIds', (ids) =>
-      mergeToUniqueArray(ids, tracksIds),
+    setState('playlists', playlistId, 'trackIds', (existing) =>
+      mergeToUniqueArray(existing, trackIds),
     )
   }
 
   const removeTracksFromPlaylist = (
     playlistId: string,
-    tracksIds: readonly string[],
+    trackIds: readonly string[],
   ) => {
-    setState('playlists', playlistId, 'trackIds', (ids) =>
-      ids.filter((id) => !tracksIds.includes(id)),
+    setState('playlists', playlistId, 'trackIds', (existing) =>
+      existing.filter((id) => !trackIds.includes(id)),
     )
   }
 
   const favoriteTrack = (trackId: string) => {
-    setState('favorites', (ids) => mergeToUniqueArray(ids, [trackId]))
+    setState('favorites', (existing) =>
+      mergeToUniqueArray(existing, [trackId]),
+    )
   }
 
   const unfavoriteTrack = (trackId: string) => {
-    setState('favorites', (existingIds) =>
-      existingIds.filter((id) => id !== trackId),
+    setState('favorites', (existing) =>
+      existing.filter((id) => id !== trackId),
     )
   }
 
