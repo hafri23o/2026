@@ -1,82 +1,91 @@
+// Inspired by:
 // https://whatwebcando.today/articles/handling-service-worker-updates/
+
+// Vite service worker virtual module
 import swURL from 'service-worker:./sw'
 
-const waitForPageToLoad = async () => {
+/* ------------------------------------------------------------------ */
+/* Utilities                                                          */
+/* ------------------------------------------------------------------ */
+
+const waitForPageToLoad = async (): Promise<void> => {
   if (document.readyState === 'loading') {
-    return new Promise((resolve) => {
-      window.addEventListener('load', resolve, { once: true })
+    await new Promise<void>((resolve) => {
+      window.addEventListener('load', () => resolve(), { once: true })
     })
   }
-  return Promise.resolve()
 }
 
-export interface Options {
-  onNeedRefresh: (updateSw: () => void) => void
+/* ------------------------------------------------------------------ */
+/* Public API                                                         */
+/* ------------------------------------------------------------------ */
+
+export interface RegisterSWOptions {
+  onNeedRefresh: (updateSW: () => void) => void
 }
 
-export const registerServiceWorker = async (options: Options) => {
-  // Allow service worker registration in development for offline testing
-  // Comment out the dev mode check to enable offline functionality in development
-  // if (import.meta.env.DEV) {
-  //   return
-  // }
+export const registerServiceWorker = async (
+  options: RegisterSWOptions,
+): Promise<void> => {
+  // Optional: disable SW in dev if needed
+  // if (import.meta.env.DEV) return
+
+  if (!('serviceWorker' in navigator)) {
+    return
+  }
 
   await waitForPageToLoad()
 
-  const { serviceWorker } = navigator
-  const registration = await serviceWorker.register(swURL, {
+  const registration = await navigator.serviceWorker.register(swURL, {
     scope: '/',
   })
 
-  const needsRefresh = (reg: ServiceWorkerRegistration) => {
-    const updateSw = () => {
-      const { waiting } = reg
+  const promptForRefresh = (reg: ServiceWorkerRegistration) => {
+    const updateSW = () => {
+      const waiting = reg.waiting
       if (waiting) {
-        waiting.postMessage('skip-waiting')
+        waiting.postMessage({ type: 'SKIP_WAITING' })
       }
     }
 
-    options.onNeedRefresh(updateSw)
+    options.onNeedRefresh(updateSW)
   }
 
-  // ensure the case when the updatefound event was missed is also handled
-  // by re-invoking the prompt when there's a waiting Service Worker
+  // Handle already-waiting SW (missed updatefound case)
   if (registration.waiting) {
-    needsRefresh(registration)
+    promptForRefresh(registration)
   }
 
-  let firstLoad = false
+  let isFirstInstall = false
 
   registration.addEventListener('updatefound', () => {
-    const { installing } = registration
-    if (!installing) {
-      return
-    }
+    const installing = registration.installing
+    if (!installing) return
 
-    // wait until the new Service worker is actually installed (ready to take over)
     installing.addEventListener('statechange', () => {
-      if (registration.waiting) {
+      if (installing.state === 'installed' && registration.waiting) {
         if (navigator.serviceWorker.controller) {
-          // if there's an existing controller (previous Service Worker), show the prompt
-          needsRefresh(registration)
+          // Existing SW → prompt user
+          promptForRefresh(registration)
         } else {
-          firstLoad = true
+          // First install → no refresh needed
+          isFirstInstall = true
         }
       }
     })
   })
 
-  let refreshing = false
-  // detect controller change and refresh the page
+  let isRefreshing = false
+
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (firstLoad) {
-      firstLoad = false
+    if (isFirstInstall) {
+      isFirstInstall = false
       return
     }
 
-    if (!refreshing) {
+    if (!isRefreshing) {
+      isRefreshing = true
       window.location.reload()
-      refreshing = true
     }
   })
 }
