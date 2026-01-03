@@ -6,7 +6,7 @@ const NotFound = (): JSXElement => (
   <Scaffold title='Not found' topBar={false}>
     <MessageBanner
       title='Nothing here :('
-      message='Page you were looking for was not found'
+      message='The page you were looking for was not found'
       button={{ href: '/', title: 'Go Home' }}
     />
   </Scaffold>
