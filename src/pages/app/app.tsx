@@ -21,31 +21,39 @@ const useIsRoute = (routes: readonly string[]) => {
 }
 
 export const App = () => {
+  // Setup the app's state and configuration
   useSetupApp()
 
   const Routes = useRoutes(ROUTES)
   const isRouting = useIsRouting()
 
+  // Define routes related to the player and library
   const isPlayerRoute = useIsRoute(['/player', '/player/queue'])
   const isLibraryRoute = useIsRoute(
     LIBRARY_CONFIG.map((c) => `/library/${c.path}`),
   )
+  
+  // Track if the previous route was a library route
   const [wasLibaryPrevRoute, setWasLibaryPrevRoute] = createSignal(false)
 
   createEffect(() => {
     const isLibrary = isLibraryRoute()
-    // Deffer setting values only after page changed.
+    // Defer setting values only after page change
     requestAnimationFrame(() => {
       setWasLibaryPrevRoute(isLibrary)
     })
   })
 
+  // Handle responsive layout for small screens
   const isSmallLayout = createMediaQuery('(max-width: 700px)')
+  
+  // Determine if the bottom nav bar should be visible
   const isBottomNavBarVisible = () =>
     isLibraryRoute() && IS_DEVICE_A_MOBILE && isSmallLayout()
 
   return (
     <div class={styles.appContainer}>
+      {/* Loading Indicator */}
       <div
         class={clx(
           styles.loadingIndicator,
@@ -54,14 +62,18 @@ export const App = () => {
       />
 
       <div class={styles.pages}>
+        {/* Routing context provider for player overlay */}
         <PlayerOverlayContext.Provider value={() => !isPlayerRoute()}>
           <PageTransition forwards={wasLibaryPrevRoute()}>
             <Suspense>
+              {/* Render Routes from the router */}
               <Routes />
             </Suspense>
           </PageTransition>
         </PlayerOverlayContext.Provider>
       </div>
+
+      {/* Bottom Overlay (e.g., Bottom Nav Bar) */}
       <div
         class={clx(
           styles.bottomOverlay,
@@ -74,6 +86,7 @@ export const App = () => {
           move
           // initial={isPageLoaded}
         >
+          {/* Toaster notifications and mini player */}
           <Toaster />
           {!isPlayerRoute() && <MiniPlayer />}
         </CSSTransition>
