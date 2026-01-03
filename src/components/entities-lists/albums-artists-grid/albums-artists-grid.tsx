@@ -1,9 +1,9 @@
 import { createMemo, ParentComponent } from 'solid-js'
 import { VirtualContainer } from '@minht11/solid-virtual-container'
-import { useEntitiesStore } from '../../../stores/stores'
+import { useEntitiesStore } from '~/stores/stores'  // Updated path alias to match tsconfig.json
 import * as styles from './albums-artists.css'
 import { AlbumArtistGridItem } from './album-artist-grid-item'
-import { Album, Artist } from '~/types/types'
+import { Album, Artist } from '~/types/types'  // Updated path alias
 
 export interface AlbumsArtistsGridProps {
   type: 'album' | 'artist'
@@ -24,16 +24,14 @@ const calculateItemSize = (crossAxisSize: number) => {
   }
 }
 
-export const AlbumsArtistsGrid: ParentComponent<AlbumsArtistsGridProps> = (
-  props,
-) => {
+export const AlbumsArtistsGrid: ParentComponent<AlbumsArtistsGridProps> = (props) => {
   const [entities] = useEntitiesStore()
 
+  // Memoize the entity list based on the type of the grid (album or artist)
   const entitiesList = createMemo(() => {
     if (props.type === 'album') {
       return entities.albums
     }
-
     return entities.artists
   })
 
