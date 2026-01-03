@@ -6,12 +6,12 @@ import {
   Show,
   untrack,
 } from 'solid-js'
-import { useMatch } from 'solid-app-router'
+import { useMatch } from '@solidjs/router' // Correcting the import for Solid Router
 import { Dynamic } from 'solid-js/web'
-import { BaseMusicItem, MusicItemType } from '../../types/types'
-import { useEntitiesStore } from '../../stores/stores'
+import { BaseMusicItem, MusicItemType } from '~/types/types' // Make sure path is correct with your tsconfig paths
+import { useEntitiesStore } from '~/stores/stores'
 import { CONFIGS } from './configs'
-import { MessageBanner } from '../../components/message-banner/message-banner'
+import { MessageBanner } from '~/components/message-banner/message-banner'
 import { SearchHeader } from './search-header/search-header'
 import { Scaffold } from '~/components/scaffold/scaffold'
 import { Icon } from '~/components/icon/icon'
@@ -92,7 +92,7 @@ const Search = (): JSXElement => {
   return (
     <Scaffold
       topBar={<SearchHeader searchTerm={searchTerm()} />}
-      title='Search'
+      title="Search"
       scrollable
     >
       <div class={styles.chipsContainer}>
@@ -102,16 +102,13 @@ const Search = (): JSXElement => {
               class={clx(styles.chip, page.isSelected() && styles.chipSelected)}
               onClick={() => page.setIsSelected((prev) => !prev)}
             >
-              <Icon icon='checkmark' class={styles.chipIcon} />
+              <Icon icon="checkmark" class={styles.chipIcon} />
               {page.title}
             </button>
           )}
         </For>
       </div>
-      <Show
-        when={isNotEmpty()}
-        fallback={<MessageBanner message='Nothing found' />}
-      >
+      <Show when={isNotEmpty()} fallback={<MessageBanner message="Nothing found" />}>
         <For each={pages}>
           {(page) => (
             <Show when={page.itemIds().length && page.isSelected()}>
