@@ -1,6 +1,6 @@
 import { useNavigate } from 'solid-app-router'
 import { createSignal, JSXElement } from 'solid-js'
-import { IconButton } from '~/components/icon-button/icon-button'
+import { IconButton } from '~/components/icon-button/icon-button'  // Using path alias from tsconfig.json
 import { Artwork } from '~/components/shared-player-components/artwork/artwork'
 import { Controls } from '~/components/shared-player-components/controls/main-controls'
 import { VolumePanel } from '~/components/shared-player-components/volume/volume-panel'
@@ -12,7 +12,7 @@ import { Timeline } from '~/components/shared-player-components/timeline/timelin
 import { clx, useResizeObserver } from '~/utils'
 import { useMenu } from '~/components/menu/menu'
 import { AppTopBar } from '~/components/app-top-bar/app-top-bar'
-import * as styles from './controls-pane.css'
+import * as styles from './controls-pane.css'  // Correct import of the CSS module
 
 const VolumeMenuContent = () => (
   <div class={styles.volumeMenuContent}>
@@ -42,8 +42,8 @@ export const ControlsPane = (props: FullPlayerProps): JSXElement => {
     (entry) => {
       const { width, height } = entry.contentRect
 
+      // Checking if layout is horizontal based on aspect ratio
       const isHorizontal = width / height > 1.1
-
       setIsHorizontalLayout(isHorizontal)
     },
   )
@@ -62,7 +62,7 @@ export const ControlsPane = (props: FullPlayerProps): JSXElement => {
         <div class={styles.controls}>
           <div class={styles.info}>
             <Info bigTitle />
-              <FavoriteButton />
+            <FavoriteButton />
           </div>
           <Timeline />
           <Controls />
