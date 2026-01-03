@@ -8,8 +8,10 @@ import {
 } from '~/styles/shared.css'
 import '~/styles/global.css'
 
+// Ensure that shared styles are correctly imported and applied
 export const { interactable } = sharedStyles
 
+// Main container for the app, with responsive behavior
 export const appContainer = style({
   height: '100%',
   width: '100%',
@@ -22,11 +24,13 @@ export const appContainer = style({
   },
 })
 
+// Container for the pages, ensuring full height and width
 export const pages = style({
   height: '100%',
   width: '100%',
 })
 
+// Styles for the bottom overlay, using sprinkles for layout
 export const bottomOverlay = style([
   sprinkles({
     gap: '8px',
@@ -47,10 +51,12 @@ export const bottomOverlay = style([
   }),
 ])
 
+// Class for the bottom navbar visibility toggle
 export const bottomNavBarVisible = style({
   transform: 'translateY(-64px)',
 })
 
+// Loading indicator styles, hidden by default
 export const loadingIndicator = style({
   position: 'absolute',
   top: '0',
@@ -61,6 +67,7 @@ export const loadingIndicator = style({
   display: 'none',
 })
 
+// Keyframes for loading animations
 const loadingAppearAni = keyframes({
   from: {
     opacity: 0,
@@ -73,6 +80,7 @@ const loadingAni = keyframes({
   },
 })
 
+// Styles for when the loading indicator is enabled
 export const loadingIndicatorEnabled = style({
   display: 'block',
   animation: `${loadingAppearAni} .2s .4s both`,
@@ -89,6 +97,7 @@ export const loadingIndicatorEnabled = style({
   },
 })
 
+// Keyframes for item animations (enter/exit)
 const itemEnterAni = keyframes({
   from: {
     transform: 'translateY(40px)',
@@ -101,6 +110,7 @@ const itemExitAni = keyframes({
   },
 })
 
+// Styles for when an item enters
 export const itemEnter = style({
   animation: `
     ${itemEnterAni} 150ms ${EASING_INCOMING_80},
@@ -108,6 +118,7 @@ export const itemEnter = style({
   `,
 })
 
+// Styles for when an item exits
 export const itemExit = style({
   animation: `
     ${itemExitAni} 150ms ${EASING_OUTGOING_40},
