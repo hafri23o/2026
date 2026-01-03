@@ -14,15 +14,18 @@ export const useMapRouteToValue = <T>(
   const location = useLocation()
 
   const valueFnMemo = createMemo(() => {
-    // eslint-disable-next-line no-unused-expressions
+    // Ensure that we are tracking the `pathname` change.
     location.pathname
 
+    // Find the first match for the current path
     const match = untrack(() => matcherEntries.find(([matcher]) => matcher()))
 
+    // If no match found, return the default value
     if (!match) {
       return () => defaultValue
     }
 
+    // Return the value function associated with the matched route
     return match[1]
   })
 
