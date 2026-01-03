@@ -1,13 +1,16 @@
-import { style, keyframes } from '@vanilla-extract/css'
-import { EASING_INCOMING_80, EASING_OUTGOING_40 } from '~/styles/shared.css'
-import { sharedStyles, sprinkles, vars } from '~/styles/styles.css'
+import { style, keyframes } from '@vanilla-extract/css'  // Importing Vanilla Extract utilities
+import { EASING_INCOMING_80, EASING_OUTGOING_40 } from '~/styles/shared.css'  // Path alias to shared styles
+import { sharedStyles, sprinkles, vars } from '~/styles/styles.css'  // Using '~' alias for styles
 
+// Exporting some of the shared styles from styles.css
 export const { tonalButton, filledButton, outlinedButton } = sharedStyles
 
+// Navigation tabs styling
 export const navTabs = style({
   display: 'flex',
 })
 
+// Navigation rail (vertical side bar) styles
 export const navRail = style([
   sharedStyles.flexColumn,
   style({
@@ -17,17 +20,21 @@ export const navRail = style([
   }),
 ])
 
+// Bottom bar for navigation
 export const navBottomBar = style({
   display: 'flex',
   height: '64px',
 })
 
+// Elevated effect using sprinkles for consistency
 export const elavated = sprinkles({
   tonalElevation: 2,
 })
 
+// Style for selected navigation button (visual effects)
 export const navBtnSelected = style({})
 
+// Base styles for navigation button
 const navBtnBase = style({
   height: '56px',
   width: '100%',
@@ -71,6 +78,7 @@ const navBtnBase = style({
   },
 })
 
+// Main button style (used for navigation buttons)
 export const navBtn = style([
   sharedStyles.interactable,
   sharedStyles.flexColumn,
@@ -82,17 +90,20 @@ export const navBtn = style([
   }),
 ])
 
+// Content styling for the page
 export const content = style({
   display: 'grid',
   width: '100%',
   height: '100%',
 })
 
+// Main container for the library page
 export const libraryPageContainer = style({
   transformOrigin: '50% 50vh',
   gridArea: '1 / 1',
 })
 
+// Animation for entering the page
 const enterPageAni = keyframes({
   from: {
     transform: 'scale(.92, .92)',
@@ -100,16 +111,19 @@ const enterPageAni = keyframes({
   },
 })
 
+// Style for page entry animation
 export const enterPage = style({
   pointerEvents: 'none',
   animation: `${enterPageAni} 210ms 90ms ${EASING_INCOMING_80} backwards`,
 })
 
+// Style for page exit animation
 export const exitPage = style({
   pointerEvents: 'none',
   animation: `${sharedStyles.fadeOutAni} 90ms ${EASING_OUTGOING_40} forwards`,
 })
 
+// Styling for actions (e.g., buttons or controls at the top or bottom)
 export const actions = style([
   sharedStyles.actions,
   style({ justifyContent: 'flex-end' }),
