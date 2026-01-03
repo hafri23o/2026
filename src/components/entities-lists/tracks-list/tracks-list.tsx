@@ -11,16 +11,16 @@ import {
   VirtualContainer,
   VirtualItemProps,
 } from '@minht11/solid-virtual-container'
-import { Track } from '../../../types/types'
-import { clx, formatTime, pluralize, useResizeObserver } from '../../../utils'
-import { MusicImage } from '../../music-image/music-image'
-import { MenuItem } from '../../menu/menu'
-import { useEntitiesStore, usePlayerStore } from '../../../stores/stores'
-import { useModals } from '../../modals/modals'
-import { ListItem } from '~/components/list-item/listi-tem'
-import { isUrlCached, downloadAudio } from '../../../audio/audio-cache'
-import { toast } from '~/components/toast/toast'
-import * as styles from './tracks-list.css'
+import { Track } from '~/types/types' // Updated path alias
+import { clx, formatTime, pluralize, useResizeObserver } from '~/utils' // Updated path alias
+import { MusicImage } from '~/components/music-image/music-image' // Updated path alias
+import { MenuItem } from '~/components/menu/menu' // Updated path alias
+import { useEntitiesStore, usePlayerStore } from '~/stores/stores' // Updated path alias
+import { useModals } from '~/components/modals/modals' // Updated path alias
+import { ListItem } from '~/components/list-item/listi-tem' // Updated path alias
+import { isUrlCached, downloadAudio } from '~/audio/audio-cache' // Updated path alias
+import { toast } from '~/components/toast/toast' // Updated path alias
+import * as styles from './tracks-list.css' // Ensure this is referencing the updated CSS file
 
 const UNKNOWN_ITEM_STRING = '<unknown>'
 
@@ -32,8 +32,6 @@ export interface TracksListProps {
   onItemClick?: (item: Track, index: number) => void
   showIndex?: boolean
   isPlayingItem?: (item: Track, index: number) => boolean
-  // TODO: Menu handling needs rewriting. One possible solution is predefined
-  // options list.
   additionalMenuItems?: (item: Track, actions: EntitiesActions) => MenuItem[]
 }
 
