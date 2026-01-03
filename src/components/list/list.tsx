@@ -1,4 +1,4 @@
-import { children, JSX, createRenderEffect, ParentComponent } from 'solid-js'
+import { children, JSX, createRenderEffect, ParentComponent, onCleanup } from 'solid-js'
 import { clickFocusedElement, clx, doesElementContainFocus } from '../../utils'
 import { KeyboardCode } from '../../utils/key-codes'
 import * as styles from './list.css'
@@ -10,19 +10,23 @@ export interface ListProps extends JSX.HTMLAttributes<HTMLDivElement> {
 export const List: ParentComponent<ListProps> = (props) => {
   let listContainerEl: HTMLDivElement
 
+  // Accessing children passed to the component
   const listItems = children(() => props.children) as () => HTMLElement[]
 
+  // Create effect to set the tabindex for each child element
   createRenderEffect(() => {
     listItems().forEach((el, index) =>
       el.setAttribute('tabindex', index === 0 ? '0' : '-1'),
     )
   })
 
+  // Helper function to query elements inside the list container
   const query = (selector: string) =>
     listContainerEl.querySelector<HTMLElement>(
       `.${styles.listContainer} > ${selector}`,
     )
 
+  // Set tabindex for selected elements
   const queryAndSetTabIndex = (value: -1 | 0, selector: string) => {
     const element = query(selector)
     if (element) {
@@ -31,6 +35,7 @@ export const List: ParentComponent<ListProps> = (props) => {
     return element
   }
 
+  // Keyboard handling (arrow keys and enter)
   const onKeyDownHandler = (e: KeyboardEvent) => {
     const { code } = e
 
@@ -38,8 +43,7 @@ export const List: ParentComponent<ListProps> = (props) => {
     if (isArrowDown || code === KeyboardCode.ARROW_UP) {
       let newFocusedEl
 
-      // If list container is focused but not any of listitems
-      // focus them instead.
+      // If list container is focused but not any of the list items, focus the first or last item
       if (listContainerEl.matches(':focus')) {
         const selector = isArrowDown ? ':first-child' : ':last-child'
         newFocusedEl = query(selector)
@@ -63,11 +67,13 @@ export const List: ParentComponent<ListProps> = (props) => {
     e.preventDefault()
   }
 
+  // Focus handling: when an element inside the list gets focused
   const onFocusInHandler = () => {
     queryAndSetTabIndex(-1, '[tabindex="0"]:not(:focus-within)')
     queryAndSetTabIndex(0, ':focus-within')
   }
 
+  // Focus handling: when focus leaves the list container
   const onFocusOutHandler = () => {
     queryAndSetTabIndex(-1, '[tabindex="0"]:not(:focus-within)')
     queueMicrotask(() => {
@@ -76,6 +82,11 @@ export const List: ParentComponent<ListProps> = (props) => {
       }
     })
   }
+
+  // Cleanup logic (for example, cleanup event listeners if needed)
+  onCleanup(() => {
+    // Any cleanup logic can go here
+  })
 
   return (
     <div
