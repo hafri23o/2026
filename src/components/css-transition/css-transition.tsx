@@ -3,9 +3,9 @@ import {
   animateMove,
   cssEnter,
   cssExit,
-} from '@otonashixav/solid-flip'
+} from '@otonashixav/solid-flip' // Importing from 'solid-flip'
 import { ParentComponent, Show } from 'solid-js'
-import { usePrefersReducedMotion } from '~/utils'
+import { usePrefersReducedMotion } from '~/utils' // Adjusted to match path alias in tsconfig.json
 
 export interface CSSTransitionProps {
   enter: string
@@ -15,7 +15,7 @@ export interface CSSTransitionProps {
 }
 
 export const CSSTransition: ParentComponent<CSSTransitionProps> = (props) => {
-  const prefersReducedMotion = usePrefersReducedMotion()
+  const prefersReducedMotion = usePrefersReducedMotion() // Hook to check user's motion preferences
 
   return (
     <Show when={!prefersReducedMotion()} fallback={props.children}>
