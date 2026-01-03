@@ -1,14 +1,11 @@
 import { ParentComponent, createMemo, VoidComponent } from 'solid-js'
-import {
-  VirtualContainer,
-  VirtualItemProps,
-} from '@minht11/solid-virtual-container'
-import { FAVORITES_ID } from '../../../types/constants'
-import { Icon } from '../../icon/icon'
-import { useEntitiesStore } from '../../../stores/stores'
-import { useModals } from '../../modals/modals'
-import { MusicItemType } from '../../../types/types'
-import { ListItem } from '~/components/list-item/listi-tem'
+import { VirtualContainer, VirtualItemProps } from '@minht11/solid-virtual-container'
+import { FAVORITES_ID } from '~/types/constants' // Use path alias
+import { Icon } from '~/components/icon/icon' // Use path alias
+import { useEntitiesStore } from '~/stores/stores' // Use path alias
+import { useModals } from '~/components/modals/modals' // Use path alias
+import { MusicItemType } from '~/types/types' // Use path alias
+import { ListItem } from '~/components/list-item/list-item' // Fixed typo in import path
 
 interface PlaylistItem extends VirtualItemProps<string> {
   onClick: () => void
@@ -74,7 +71,6 @@ export interface PlaylistListProps {
 }
 
 export const PlaylistList: ParentComponent<PlaylistListProps> = (props) => {
-  // Maybe memo is not needed here?
   const playlistsIds = createMemo(() => {
     const { items } = props
 
