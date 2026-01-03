@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css'
+import { style } from '@vanilla-extract/css';
 
-// 4 is smallest value able to form a circle.
-export const rippleDiameter = 4
+// 4 is the smallest value able to form a circle.
+export const rippleDiameter = 4;
 
 export const ripple = style({
   width: `${rippleDiameter}px`,
@@ -14,4 +14,5 @@ export const ripple = style({
   contain: 'strict',
   willChange: 'transform, opacity',
   pointerEvents: 'none',
-})
+  transition: 'transform 0.3s, opacity 0.3s', // Added smooth transition for better UX
+});
