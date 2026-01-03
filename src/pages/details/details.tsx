@@ -16,6 +16,7 @@ import { Scaffold } from '~/components/scaffold/scaffold'
 import { MusicImage } from '~/components/music-image/music-image'
 import * as styles from './details.css'
 
+// Lazy loading the NotFound component
 const NotFound = lazy(() => import('../not-found/not-found'))
 
 const DetailsPage = (props: DetailsPageConfig) => {
@@ -28,6 +29,7 @@ const DetailsPage = (props: DetailsPageConfig) => {
   const params = useParams()
   const navigate = useNavigate()
 
+  // Selector for retrieving specific entities (albums, artists, playlists)
   const itemsSelector = () => {
     switch (props.type) {
       case MusicItemType.ALBUM:
@@ -41,6 +43,7 @@ const DetailsPage = (props: DetailsPageConfig) => {
     }
   }
 
+  // Memoized data retrieval based on the item type and selected item
   const dataMemo = createMemo(() => {
     const itemId = decodeURIComponent(params.itemId || '')
 
@@ -125,6 +128,7 @@ const DetailsPage = (props: DetailsPageConfig) => {
     )
   }
 
+  // Ensure the memo is strongly typed
   const data = dataMemo as () => NonNullable<ReturnType<typeof dataMemo>>
 
   return (
