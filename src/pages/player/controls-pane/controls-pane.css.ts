@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css'
-import { sprinkles } from '~/styles/styles.css'
+import { sprinkles } from '~/styles/styles.css'  // Using the alias from tsconfig.json
 
 export const pinned = style({
   maxWidth: '320px',
@@ -17,8 +17,8 @@ export const controlsPane = style([
     alignItems: 'center',
     gap: '8px',
     overflow: 'hidden',
-    surface: 'secondaryContainer',
-    color: 'onSecondaryContainer',
+    surface: 'secondaryContainer', // Assuming 'secondaryContainer' is a valid theme key
+    color: 'onSecondaryContainer',  // Assuming 'onSecondaryContainer' is a valid theme key
   }),
   style({
     width: '100%',
@@ -70,7 +70,7 @@ export const artwork = style([
     gridArea: 'artwork',
     '@media': {
       '(max-width: 200px)': {
-        display: 'none',
+        display: 'none', // Hide artwork on small screens
       },
     },
   }),
@@ -109,7 +109,6 @@ export const secondaryActions = style({
 export const volumeMenuContent = sprinkles({
   paddingX: '16px',
 })
-
 
 export const lyrics = style({
   gridArea: 'lyrics',
