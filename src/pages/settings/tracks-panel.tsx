@@ -1,11 +1,12 @@
 import { VoidComponent, createMemo } from 'solid-js'
-import { pluralize } from '~/utils'
-import { useEntitiesStore } from '~/stores/stores'
-import * as styles from './settings.css'
+import { pluralize } from '~/utils'  // Path alias used correctly
+import { useEntitiesStore } from '~/stores/stores'  // Path alias used correctly
+import * as styles from './settings.css'  // Ensure styles are imported with correct path
 
 export const TracksPanel: VoidComponent = () => {
   const [entities] = useEntitiesStore()
 
+  // Memoize tracks count for better performance
   const tracksCount = createMemo(() => Object.keys(entities.tracks).length)
 
   return (
