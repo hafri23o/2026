@@ -1,9 +1,9 @@
 import { JSXElement } from 'solid-js'
 import { useNavigate } from 'solid-app-router'
 import { VirtualItemProps } from '@minht11/solid-virtual-container'
-import { Album, Artist, MusicItemType } from '../../../types/types'
-import { MusicImage } from '../../music-image/music-image'
-import { UNKNOWN_WORD_STRING } from '../../../types/constants'
+import { Album, Artist, MusicItemType } from '~/types/types'  // Updated path alias to match tsconfig.json
+import { MusicImage } from '~/components/music-image/music-image'  // Updated path alias
+import { UNKNOWN_WORD_STRING } from '~/types/constants'  // Updated path alias
 import * as styles from './albums-artists.css'
 
 type AlbumOrArtist = Album | Artist
