@@ -1,8 +1,12 @@
-import { style } from '@vanilla-extract/css'
-import { sharedStyles, sprinkles } from '~/styles/styles.css'
+import { style } from '@vanilla-extract/css'; // Import from Vanilla Extract for CSS-in-TypeScript
+import { sharedStyles, sprinkles } from '~/styles/styles.css'; // Use alias `~` to import shared styles and sprinkles
 
-export const { tonalButton } = sharedStyles
+// Exported styles for the component
 
+// Destructure `tonalButton` from `sharedStyles`
+export const { tonalButton } = sharedStyles;
+
+// The `content` style block for the main wrapper
 export const content = style([
   sprinkles({
     display: 'flex',
@@ -20,46 +24,51 @@ export const content = style([
       },
     },
   }),
-])
+]);
 
+// Style for the music image section
 export const musicImage = style({
-  height: '160px',
-})
+  height: '160px', // Ensure image maintains consistent size
+});
 
+// Title style, combining `sharedStyles` and `sprinkles` for typography and color
 export const title = style([
-  sharedStyles.textEclipse,
+  sharedStyles.textEclipse, // Shared style for text truncation
   sprinkles({
-    typography: 'headlineMedium',
-    color: 'onSurface',
+    typography: 'headlineMedium', // Use typography from sprinkles
+    color: 'onSurface', // Color from sprinkles (should match your theme)
   }),
   style({
-    whiteSpace: 'nowrap',
+    whiteSpace: 'nowrap', // Prevent text from wrapping
   }),
-])
+]);
 
+// `details` container for the secondary information
 export const details = style([
   sprinkles({
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
-    overflow: 'hidden',
+    overflow: 'hidden', // Hide overflow text or content
   }),
   style({
-    width: '100%',
+    width: '100%', // Full width for container
   }),
-])
+]);
 
+// Style for the secondary text (e.g., labels or other descriptive text)
 export const secondary = style([
-  sharedStyles.textEclipse,
+  sharedStyles.textEclipse, // Shared style for text truncation
   sprinkles({
-    typography: 'labelLarge',
-    color: 'onSurfaceVariant',
+    typography: 'labelLarge', // Label size for secondary information
+    color: 'onSurfaceVariant', // Slightly different color for secondary text
   }),
-])
+]);
 
+// Action buttons or links container, styled to stay at the bottom of the parent
 export const actions = style([
-  sharedStyles.actions,
+  sharedStyles.actions, // Shared actions styles (assumed)
   style({
-    marginTop: 'auto',
+    marginTop: 'auto', // Push actions to the bottom of the container
   }),
-])
+]);
