@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css'
-import { sprinkles } from '../../styles/styles.css'
+import { sprinkles } from '../../styles/styles.css' // Ensure the path is correct
 
+// The section style uses the `sprinkles` utility from Vanilla Extract for utility-based styling
 export const section = style([
   sprinkles({
     typography: 'bodyLarge',
@@ -20,11 +21,13 @@ export const section = style([
   }),
 ])
 
+// Logo styling
 export const logo = style({
   height: '96px',
   width: '96px',
 })
 
+// Title styling using `sprinkles` utility for consistent theme and typography
 export const title = sprinkles({
   typography: 'headlineMedium',
   color: 'onSurface',
