@@ -7,22 +7,29 @@ import {
   CorePalette,
 } from '@material/material-color-utilities'
 
+// Re-export the utility function
 export { argbFromHex }
 
 export const getAppTheme = (argb: number, isDark: boolean) => {
   const palette = CorePalette.of(argb)
 
+  // Define the PaletteKey type more explicitly to match the keys available in CorePalette
   type PaletteKey = 'a1' | 'a2' | 'a3' | 'error' | 'n1' | 'n2'
+
+  // Utility function to get tone based on light/dark mode
   const getTone = (key: PaletteKey, tones: [light: number, dark: number]) => {
     const tone = isDark ? tones[1] : tones[0]
     return palette[key].tone(tone)
   }
 
+  // Utility function to get the hex tone
   const getHexTone = (key: PaletteKey, tones: [light: number, dark: number]) =>
     hexFromArgb(getTone(key, tones))
 
+  // Primary color tones
   const primaryArgb = getTone('a1', [40, 80])
 
+  // Return the theme configuration with explicit types
   return {
     primaryRgb: [
       redFromArgb(primaryArgb),
