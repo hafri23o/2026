@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css'
-import { sharedStyles, vars, sprinkles } from '../../styles/styles.css'
+import { sharedStyles, vars, sprinkles } from '~/styles/styles.css' // Use path alias '~'
 
 export const section = style([
   sprinkles({
