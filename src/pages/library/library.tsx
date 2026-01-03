@@ -15,7 +15,7 @@ import { IS_DEVICE_A_MOBILE, clx } from '~/utils'
 import { CONFIG, LibraryPageConfig } from './config'
 import * as styles from './library.css'
 
-const [installEvent, setInstallEvent] = createSignal<BeforeInstallPromptEvent>()
+const [installEvent, setInstallEvent] = createSignal<BeforeInstallPromptEvent | undefined>()
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault()
   setInstallEvent(e as BeforeInstallPromptEvent)
@@ -146,7 +146,7 @@ interface NavigationButtonsProps {
   type: 'rail' | 'bottom' | 'tabs'
 }
 
-const getNavButtonsclass = (type: NavigationButtonsProps['type']) => {
+const getNavButtonsClass = (type: NavigationButtonsProps['type']) => {
   switch (type) {
     case 'rail':
       return styles.navRail
@@ -162,7 +162,7 @@ const getNavButtonsclass = (type: NavigationButtonsProps['type']) => {
 const NavigationButtons = (props: NavigationButtonsProps) => (
   <div
     class={clx(
-      getNavButtonsclass(props.type),
+      getNavButtonsClass(props.type),
       props.type === 'bottom' && styles.elavated,
     )}
   >
