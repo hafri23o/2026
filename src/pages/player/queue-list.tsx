@@ -1,8 +1,8 @@
 import { JSXElement } from 'solid-js'
-import { usePlayerStore } from '~/stores/stores'
-import { TracksList } from '~/components/entities-lists/tracks-list/tracks-list'
-import { MessageBanner } from '~/components/message-banner/message-banner'
-import { ScrollContainer } from '~/components/scroll-container/scroll-container'
+import { usePlayerStore } from '~/stores/stores' // Correct path alias
+import { TracksList } from '~/components/entities-lists/tracks-list/tracks-list' // Correct path alias
+import { MessageBanner } from '~/components/message-banner/message-banner' // Correct path alias
+import { ScrollContainer } from '~/components/scroll-container/scroll-container' // Correct path alias
 
 export const QueueList = (): JSXElement => {
   const [playerState, playerActions] = usePlayerStore()
