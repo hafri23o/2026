@@ -1,8 +1,8 @@
 import { JSX, Show, VoidComponent } from 'solid-js'
-import { clx } from '~/utils'
+import { clx } from '~/utils'  // Using path alias '~'
 import { IconButton } from '../icon-button/icon-button'
 import { useMenu, MenuOptions, MenuItem } from '../menu/menu'
-import * as styles from './list-item.css'
+import * as styles from './list-item.css'  // Import styles
 
 export interface ListItemProps extends JSX.HTMLAttributes<HTMLDivElement> {
   text: string
@@ -19,8 +19,9 @@ export interface ListItemProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
 
 export const ListItem: VoidComponent<ListItemProps> = (props) => {
-  const menu = useMenu()
+  const menu = useMenu() // Hook to manage menu
 
+  // Menu handler when right-click or context menu is triggered
   const onMenuHandler = (anchor: boolean, e: MouseEvent) => {
     if (props.disableMenu) {
       return
@@ -41,35 +42,35 @@ export const ListItem: VoidComponent<ListItemProps> = (props) => {
       return
     }
 
-    menu.show(items, e.target as HTMLElement, options)
+    menu.show(items, e.target as HTMLElement, options) // Show the menu
   }
 
   return (
     <div
       role='listitem'
       tabIndex={props.tabIndex}
-      onClick={props.onClick}
+      onClick={props.onClick}  // On click handler
       class={clx(
-        styles.listItem,
-        props.isSelected && styles.selected,
-        props.class,
+        styles.listItem,  // Applying the styles
+        props.isSelected && styles.selected,  // If selected, add 'selected' class
+        props.class,  // Additional class from props
       )}
-      style={props.style}
-      onContextMenu={[onMenuHandler, false]}
+      style={props.style}  // Inline styles from props
+      onContextMenu={[onMenuHandler, false]}  // Right-click context menu handler
     >
-      {props.icon && <div class={styles.icon}>{props.icon}</div>}
+      {props.icon && <div class={styles.icon}>{props.icon}</div>}  {/* Icon */}
       <div class={styles.textContainer}>
-        <div class={styles.mainText}>{props.text}</div>
-        <div class={styles.textEclipse}>{props.secondaryText}</div>
+        <div class={styles.mainText}>{props.text}</div> {/* Main text */}
+        <div class={styles.textEclipse}>{props.secondaryText}</div> {/* Secondary text */}
       </div>
-      {props.trailing && <div class={styles.trailing}>{props.trailing}</div>}
+      {props.trailing && <div class={styles.trailing}>{props.trailing}</div>}  {/* Trailing content */}
       <Show when={!props.disableMenu}>
         <IconButton
-          title='More actions'
-          icon='moreVertical'
+          title='More actions'  // Button title
+          icon='moreVertical'  // Icon for the button
           tabIndex={props.tabIndex}
-          onClick={[onMenuHandler, true]}
-          class={styles.menu}
+          onClick={[onMenuHandler, true]}  // Left-click to trigger menu with anchor
+          class={styles.menu}  // Apply menu style
         />
       </Show>
     </div>
