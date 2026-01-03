@@ -1,5 +1,5 @@
 import { style, createVar, globalStyle } from '@vanilla-extract/css'
-import { sharedStyles, sprinkles, vars } from '../../../styles/styles.css'
+import { sharedStyles, sprinkles, vars } from '~/styles/styles.css'  // Updated path alias to match tsconfig.json
 
 export const INFO_CONTAINER_HEIGHT = 64
 const SCROLLBAR_SIZE_WORST_CASE = 18
@@ -8,13 +8,12 @@ export const SIDE_GAP = 8
 
 const stripScrollBarColor = createVar()
 
+// Scroll container styles
 export const scrollContainer = style({
   vars: {
     [stripScrollBarColor]: 'transparent',
   },
-  height: `${
-    180 + INFO_CONTAINER_HEIGHT + SCROLLBAR_SIZE_WORST_CASE
-  }px !important`,
+  height: `${180 + INFO_CONTAINER_HEIGHT + SCROLLBAR_SIZE_WORST_CASE}px !important`,
   width: '100%',
   display: 'flex',
   scrollbarColor: `${stripScrollBarColor} transparent`,
@@ -36,11 +35,13 @@ export const scrollContainer = style({
   },
 })
 
+// Grid item styles
 export const gridItem = style({
   padding: `0 ${SIDE_GAP / 2}px ${BOTTOM_GAP}px`,
   outlineOffset: `-${SIDE_GAP / 2}px`,
 })
 
+// Content inside grid item
 export const gridItemContent = style([
   sharedStyles.interactable,
   sprinkles({
@@ -54,10 +55,12 @@ export const gridItemContent = style([
   }),
 ])
 
+// Artwork image styling
 export const artwork = style({
   width: '100%',
 })
 
+// Info container for title and artists
 const infoContainerBase = style({
   height: INFO_CONTAINER_HEIGHT,
   whiteSpace: 'nowrap',
@@ -79,6 +82,7 @@ export const infoContainer = style([
   }),
 ])
 
+// Ensure that text overflows with ellipsis
 globalStyle(`${infoContainerBase} > *`, {
   textOverflow: 'ellipsis',
   overflow: 'hidden',
@@ -86,6 +90,7 @@ globalStyle(`${infoContainerBase} > *`, {
   width: '100%',
 })
 
+// Title styles inside the info container
 export const title = sprinkles({
   typography: 'bodyLarge',
   color: 'onSurface',
