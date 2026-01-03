@@ -1,10 +1,10 @@
 import { useNavigate } from 'solid-app-router'
 import { JSX } from 'solid-js'
-import * as configs from '~/base-page-configs'
-import { Icon, IconType } from '~/components/icon/icon'
-import { useModals } from '~/components/modals/modals'
-import { MusicItemKey } from '~/types/types'
-import * as styles from './library.css'
+import * as configs from '~/base-page-configs'  // Using the alias '~'
+import { Icon, IconType } from '~/components/icon/icon'  // Using the alias '~'
+import { useModals } from '~/components/modals/modals'  // Using the alias '~'
+import { MusicItemKey } from '~/types/types'  // Using the alias '~'
+import * as styles from './library.css'  // Ensure that the path is correctly resolved
 
 interface SortItem {
   name: string
@@ -21,6 +21,7 @@ export interface LibraryPageConfig extends configs.BaseConfig {
 const SORT_NAME = { name: 'A to Z', key: MusicItemKey.NAME } as const
 const SORT_YEAR = { name: 'Year', key: MusicItemKey.YEAR } as const
 
+// Create button for adding new playlists
 const CreateNewPlaylistButton = () => {
   const modals = useModals()
 
@@ -37,10 +38,9 @@ const CreateNewPlaylistButton = () => {
   )
 }
 
-
-
+// Define LibraryPageConfig items
 export const CONFIG: readonly LibraryPageConfig[] = [
-{
+  {
     ...configs.BASE_ALBUMS_CONFIG,
     icon: 'albumOutline',
     iconSelected: 'album',
@@ -90,5 +90,6 @@ export const CONFIG: readonly LibraryPageConfig[] = [
   },
 ] as const
 
+// Define library path constants
 export const LIBRARY_PATH = '/library'
 export const DEFAULT_LIBRARY_PATH = `${LIBRARY_PATH}/${CONFIG[0].path}`
