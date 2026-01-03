@@ -1,4 +1,4 @@
-import * as fuzzysort from 'fuzzysort'
+import fuzzysort from 'fuzzysort'
 import { BaseMusicItem, Track, Album, Artist, Playlist } from '../types/types'
 
 // Type for fuzzy search results
@@ -173,4 +173,4 @@ export const fuzzyFilterTracks = (term: string, tracks: Track[]): Track[] => {
 export const fuzzyFilterByName = <T extends BaseMusicItem>(term: string, items: T[]): T[] => {
   const results = fuzzySearchByName(term, items, { threshold: -500 })
   return results.map(result => result.item)
-} 
+}
