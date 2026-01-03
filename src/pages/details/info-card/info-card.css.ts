@@ -1,5 +1,5 @@
-import { style } from '@vanilla-extract/css'
-import { sharedStyles, sprinkles } from '~/styles/styles.css'
+import { style } from '@vanilla-extract/css';
+import { sharedStyles, sprinkles } from '~/styles/styles.css'; // Resolve paths with the '~' alias
 
 export const content = style([
   sprinkles({
@@ -18,15 +18,15 @@ export const content = style([
       },
     },
   }),
-])
+]);
 
 export const musicImage = style({
   height: '160px',
   width: 'max-content',
-})
+});
 
 export const title = style([
-  sharedStyles.textEclipse,
+  sharedStyles.textEclipse, // Ensure that sharedStyles is correctly defined in '~/styles/styles.css'
   sprinkles({
     typography: 'headlineMedium',
     color: 'onSurface',
@@ -34,7 +34,7 @@ export const title = style([
   style({
     whiteSpace: 'nowrap',
   }),
-])
+]);
 
 export const details = style([
   sprinkles({
@@ -46,19 +46,19 @@ export const details = style([
   style({
     width: '100%',
   }),
-])
+]);
 
 export const secondary = style([
-  sharedStyles.textEclipse,
+  sharedStyles.textEclipse, // Ensure this is defined in '~/styles/styles.css'
   sprinkles({
     typography: 'labelLarge',
     color: 'onSurfaceVariant',
   }),
-])
+]);
 
 export const actions = style([
-  sharedStyles.actions,
+  sharedStyles.actions, // Ensure this is defined in '~/styles/styles.css'
   style({
     marginTop: 'auto',
   }),
-])
+]);
