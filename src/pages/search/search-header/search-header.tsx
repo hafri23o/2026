@@ -1,64 +1,66 @@
-import { createEffect, JSXElement } from 'solid-js'
-import { useNavigate } from 'solid-app-router'
-import { IconButton } from '~/components/icon-button/icon-button'
-import { debounce, doesElementContainFocus } from '~/utils'
-import { AppTopBar } from '~/components/app-top-bar/app-top-bar'
-import * as styles from './search-header.css'
+import { createEffect, JSXElement } from 'solid-js' // Ensure Solid.js hooks are correctly imported
+import { useNavigate } from 'solid-app-router' // Solid App Router for navigation
+import { IconButton } from '~/components/icon-button/icon-button' // Path alias for components
+import { debounce, doesElementContainFocus } from '~/utils' // Path alias for utils
+import { AppTopBar } from '~/components/app-top-bar/app-top-bar' // Path alias for components
+import * as styles from './search-header.css' // Correct import for styles
 
 export interface SearchHeaderProps {
-  searchTerm: string
+  searchTerm: string // Define the props for search term
 }
 
 export const SearchHeader = (props: SearchHeaderProps): JSXElement => {
-  const navigate = useNavigate()
+  const navigate = useNavigate() // Hook for navigation
 
-  let inputEl!: HTMLInputElement
+  let inputEl!: HTMLInputElement // Reference for the input element
 
+  // Function to replace the search route
   const replaceSearchRoute = (value: string) => {
     navigate(`/search/${encodeURIComponent(value)}`, {
-      replace: true,
+      replace: true, // Replace the current history state
     })
   }
 
+  // Debounced search handler
   const onSearchHandle = debounce(() => {
     const value = inputEl.value.trim()
-
     replaceSearchRoute(value)
   }, 200)
 
+  // Clear search term handler
   const onClearSearchHandle = () => {
     replaceSearchRoute('')
   }
 
+  // Effect to sync input value with props.searchTerm
   createEffect(() => {
     if (!inputEl) {
       return
     }
 
     const term = props.searchTerm
-    // Updating url with new value causes a race condition,
-    // so only change input value when it is not focused.
+    // Prevent race condition by only updating the input value if it's not focused
     if (!doesElementContainFocus(inputEl) || term === '') {
       inputEl.value = term
     }
   })
 
   return (
-    <AppTopBar hideSpacer>
-      <div class={styles.searchBox}>
+    <AppTopBar hideSpacer> {/* Top bar component with spacer hidden */}
+      <div class={styles.searchBox}> {/* Container for search box */}
         <input
-          class={styles.searchInput}
-          aria-label='Search box'
-          placeholder='Search...'
-          autocapitalize='none'
-          onInput={onSearchHandle}
-          ref={inputEl}
+          class={styles.searchInput} // Applying styles for input
+          aria-label="Search box" // Accessibility label
+          placeholder="Search..." // Placeholder text
+          autocapitalize="none" // Disable autocapitalization
+          onInput={onSearchHandle} // Handle input changes
+          ref={inputEl} // Set reference to input
         />
-        {props.searchTerm && (
-          <IconButton icon='close' onClick={onClearSearchHandle} />
+        {props.searchTerm && ( // Show close icon if there is a search term
+          <IconButton icon="close" onClick={onClearSearchHandle} />
         )}
       </div>
-      <div class={styles.symmetrySpacer}></div>
+      <div class={styles.symmetrySpacer}></div> {/* Spacer for symmetry */}
     </AppTopBar>
   )
 }
