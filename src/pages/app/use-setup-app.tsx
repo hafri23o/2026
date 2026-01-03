@@ -1,13 +1,13 @@
 import { createEffect } from 'solid-js'
 import { setElementVars } from '@vanilla-extract/dynamic'
-import { registerServiceWorker } from '../../sw/register-sw'
-import { useAudioPlayer } from '../../audio/create-audio-player'
-import { usePlayerStore } from '../../stores/stores'
-import { installGlobalRipple } from '../../helpers/ripple/install-global-ripple'
-import { useDarkThemeEnabled } from '../../utils'
-import { colorsTheme } from '~/styles/vars.css'
-import * as styles from './app.css'
-import { toast } from '~/components/toast/toast'
+import { registerServiceWorker } from '~/sw/register-sw'  // Updated to use path alias
+import { useAudioPlayer } from '~/audio/create-audio-player'  // Updated to use path alias
+import { usePlayerStore } from '~/stores/stores'  // Updated to use path alias
+import { installGlobalRipple } from '~/helpers/ripple/install-global-ripple'  // Updated to use path alias
+import { useDarkThemeEnabled } from '~/utils'  // Updated to use path alias
+import { colorsTheme } from '~/styles/vars.css'  // Updated to use path alias
+import * as styles from '~/styles/app.css'  // Updated to use path alias
+import { toast } from '~/components/toast/toast'  // Updated to use path alias
 
 export const useSetupApp = (): void => {
   useAudioPlayer()
@@ -39,6 +39,7 @@ export const useSetupApp = (): void => {
       return
     }
 
+    // Dynamically importing theme-related module
     import('~/helpers/app-theme').then((module) => {
       const scheme = module.getAppTheme(argb, isDark)
       setElementVars(doc, colorsTheme, scheme)
@@ -46,6 +47,7 @@ export const useSetupApp = (): void => {
     })
   })
 
+  // Registering the service worker and handling updates
   registerServiceWorker({
     onNeedRefresh(updateSW) {
       toast({
@@ -63,5 +65,6 @@ export const useSetupApp = (): void => {
     },
   })
 
+  // Installing global ripple effect
   installGlobalRipple(styles.interactable)
 }
