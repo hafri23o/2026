@@ -1,8 +1,8 @@
 import { createMemo, VoidComponent } from 'solid-js'
-import { useEntitiesStore, usePlayerStore } from '../../../stores/stores'
-import { TracksList } from '../tracks-list/tracks-list'
-import { formatTime } from '../../../utils'
-import { MessageBanner } from '../../message-banner/message-banner'
+import { useEntitiesStore, usePlayerStore } from '~/stores/stores'  // Updated to use the correct path alias
+import { TracksList } from '~/components/tracks-list/tracks-list'  // Updated to use the correct path alias
+import { formatTime } from '~/utils'  // Updated to use the correct path alias
+import { MessageBanner } from '~/components/message-banner/message-banner'  // Updated to use the correct path alias
 
 export interface HistoryListProps {
   items: readonly string[]
@@ -98,4 +98,4 @@ export const HistoryList: VoidComponent<HistoryListProps> = (props) => {
       }
     />
   )
-} 
+}
