@@ -2,10 +2,14 @@ import { style } from '@vanilla-extract/css'
 import { sliderProgressColorVar } from '~/components/slider/slider.css'
 import { sprinkles } from '~/styles/sprinkles.css'
 
+// Animating style (placeholder if needed later)
 export const animating = style({})
+
+// Volume state styles
 export const volumeOff = style({})
 export const volumeLow = style({})
 
+// Volume icon styling, adjusting size and pointer events
 export const volumeIcon = style({
   fill: 'currentcolor',
   pointerEvents: 'none',
@@ -14,11 +18,13 @@ export const volumeIcon = style({
   flexShrink: 0,
 })
 
+// Volume icon at 45 degrees (for mute/volume state)
 export const volume45 = style({
   transform: 'rotate(-45deg)',
   transformOrigin: 'center center',
 })
 
+// Cross-line effect on the volume icon
 export const volumeCrossLine = style({
   transform: 'scaleY(0)',
   transformOrigin: 'top',
@@ -30,6 +36,7 @@ export const volumeCrossLine = style({
   },
 })
 
+// High volume wave animation
 export const volumeWaveHigh = style({
   transformOrigin: 'center',
   transition: 'transform 100ms',
@@ -41,6 +48,7 @@ export const volumeWaveHigh = style({
   },
 })
 
+// Slider styling, leveraging sliderProgressColorVar for dynamic color
 export const volumeSlider = style({
   vars: {
     [sliderProgressColorVar]: 'currentColor',
@@ -49,6 +57,7 @@ export const volumeSlider = style({
   marginLeft: 'auto!important',
 })
 
+// Overall volume control styling using sprinkles for responsive design
 export const volumeControl = style([
   sprinkles({
     display: 'flex',
