@@ -2,6 +2,7 @@ import { keyframes, style } from '@vanilla-extract/css'
 import { EASING_INCOMING_80, fadeInAni, fadeOutAni } from '~/styles/shared.css'
 import { sharedStyles, sprinkles, vars } from '~/styles/styles.css'
 
+// Define styles for the toast item
 export const toastItem = style([
   sprinkles({
     gap: '8px',
@@ -12,7 +13,7 @@ export const toastItem = style([
     radius: '8px',
   }),
   style({
-    padding: `6px 6px 6px 16px`,
+    padding: '6px 6px 6px 16px',
     pointerEvents: 'all',
     width: '100%',
     maxWidth: '448px',
@@ -24,6 +25,7 @@ export const toastItem = style([
   }),
 ])
 
+// Define styles for the message within the toast
 export const message = style([
   sprinkles({
     paddingY: '8px',
@@ -33,12 +35,14 @@ export const message = style([
   }),
 ])
 
+// Style for the spinner icon
 export const spinner = style({
   height: '28px',
   width: '28px',
   marginRight: '4px',
 })
 
+// Define styles for buttons in the toast
 export const buttons = style([
   sharedStyles.actions,
   style({
@@ -46,6 +50,7 @@ export const buttons = style([
   }),
 ])
 
+// Define button style
 export const btn = style([
   sharedStyles.flatButton,
   style({
@@ -53,12 +58,14 @@ export const btn = style([
   }),
 ])
 
+// Define the toast animation for entering
 const toastEnterAni = keyframes({
   from: {
     transform: 'scale(.90)',
   },
 })
 
+// Style for when the toast enters (fade-in and scale-up)
 export const toastEnter = style({
   animation: `
     ${toastEnterAni} 150ms ${EASING_INCOMING_80},
@@ -66,6 +73,7 @@ export const toastEnter = style({
   `,
 })
 
+// Style for when the toast exits (fade-out)
 export const toastExit = style({
   animation: `${fadeOutAni} 100ms linear`,
 })
