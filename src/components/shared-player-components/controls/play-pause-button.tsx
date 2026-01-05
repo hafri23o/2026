@@ -5,18 +5,23 @@ import * as styles from './controls.css'
 
 export const PlayPauseButton = (): JSXElement => {
   const [playerState, playerActions] = usePlayerStore()
-  const [entities, entityActions] = useEntitiesStore()
+  const [entities] = useEntitiesStore()
+
+  const onPlayPauseClick = () => {
+    if (!playerState.activeTrack) {
+      // If no active track, play a random one
+      playerActions.playRandomTrack()
+    } else {
+      // Otherwise toggle play/pause
+      playerActions.playPause()
+    }
+  }
+
   return (
     <button
       title={playerState.isPlaying ? 'Pause (Space)' : 'Play (Space)'}
       disabled={!Object.values(entities.tracks).length}
-      onClick={() => {
-        if (!playerState.activeTrack) {
-          playerActions.playRandomTrack()
-          return
-        }
-        playerActions.playPause()
-      }}
+      onClick={onPlayPauseClick}
       class={styles.playPauseButton}
     >
       <div
@@ -31,5 +36,3 @@ export const PlayPauseButton = (): JSXElement => {
     </button>
   )
 }
-
-
