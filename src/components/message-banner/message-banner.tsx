@@ -1,7 +1,7 @@
 import { NavLink } from 'solid-app-router'
 import { VoidComponent } from 'solid-js'
-import { clx } from '../../utils'
-import * as styles from './message-banner.css'
+import { clx } from '~/utils' // Use alias for utils from src
+import * as styles from './message-banner.css' // Using correct path to styles
 
 export interface MessageBannerProps {
   title?: string
@@ -14,6 +14,7 @@ export interface MessageBannerProps {
   }
 }
 
+// BannerButton component that can render either a NavLink or a button depending on the props
 const BannerButton: VoidComponent<NonNullable<MessageBannerProps['button']>> = (
   props,
 ) =>
@@ -27,6 +28,7 @@ const BannerButton: VoidComponent<NonNullable<MessageBannerProps['button']>> = (
     </button>
   )
 
+// Main MessageBanner component
 export const MessageBanner: VoidComponent<MessageBannerProps> = (props) => (
   <div class={clx(styles.messageBanner, props.class)}>
     {props.title && <h1 class={styles.title}>{props.title}</h1>}
