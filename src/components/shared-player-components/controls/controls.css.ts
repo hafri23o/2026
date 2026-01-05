@@ -1,8 +1,9 @@
 import { style, keyframes } from '@vanilla-extract/css'
 import { sharedStyles, vars } from '~/styles/styles.css'
 
+// Main controls container style
 export const controls = style([
-  sharedStyles.actions,
+  sharedStyles.actions, // Assuming sharedStyles contains common styles
   style({
     gridArea: 'controls',
     justifyContent: 'space-between',
@@ -10,10 +11,12 @@ export const controls = style([
   }),
 ])
 
+// Style for the enabled state
 export const enabled = style({
-  color: vars.colors.primary,
+  color: vars.colors.primary, // Assuming vars contains theme colors
 })
 
+// Indicator style when enabled
 export const enabledIndicator = style({
   position: 'absolute',
   width: '4px',
@@ -30,6 +33,7 @@ export const enabledIndicator = style({
   },
 })
 
+// Play/Pause button style
 export const playPauseButton = style([
   sharedStyles.filledButton,
   style({
@@ -47,11 +51,11 @@ export const playPauseButton = style([
   }),
 ])
 
+// Empty style for playing state (this may be used dynamically)
 export const playing = style({})
 
+// Play/Pause icon with animation for playing state
 export const playPauseIcon = style({
-  // Animation causes other nearby elements to
-  // repaint aswell. Z-index isolates repaint only to this element.
   zIndex: 1,
   position: 'relative',
   height: '24px',
@@ -64,6 +68,7 @@ export const playPauseIcon = style({
   },
 })
 
+// Style for the play/pause icon bar
 export const playPauseIconBar = style({
   background: 'currentcolor',
   height: '50%',
@@ -76,16 +81,20 @@ export const playPauseIconBar = style({
   },
 })
 
+// Flipped Y axis transformation
 export const flippedY = style({
   transform: 'scaleY(-1)',
 })
 
+// Flipped X axis transformation
 export const flippedX = style({
   transform: 'scaleX(-1)',
 })
 
+// Class for elements that are currently animating
 export const animating = style({})
 
+// Base animated icon style
 const animatedIcon = style({
   fill: 'currentcolor',
   pointerEvents: 'none',
@@ -94,6 +103,7 @@ const animatedIcon = style({
   flexShrink: 0,
 })
 
+// Skip icon styling and animation for its appearance
 export const skipIconClip = style({
   clipPath: 'inset(0 6px 0 0)',
   height: '24px',
@@ -101,6 +111,7 @@ export const skipIconClip = style({
 
 export const skipIcon = animatedIcon
 
+// Skip top animation keyframes
 const skipTopAni = keyframes({
   from: {
     transform: 'translate(0px,0px)',
@@ -110,6 +121,7 @@ const skipTopAni = keyframes({
   },
 })
 
+// Skip top animation style
 export const skipTop = style({
   selectors: {
     [`${animating} &`]: {
@@ -118,6 +130,7 @@ export const skipTop = style({
   },
 })
 
+// Skip bottom animation keyframes
 const skipBottomAni = keyframes({
   from: {
     transform: 'translate(5px, 0) scale(0)',
@@ -127,6 +140,7 @@ const skipBottomAni = keyframes({
   },
 })
 
+// Skip bottom animation style
 export const skipBottom = style({
   visibility: 'hidden',
   selectors: {
@@ -138,8 +152,10 @@ export const skipBottom = style({
   },
 })
 
+// Repeat icon style
 export const repeatIcon = animatedIcon
 
+// Repeat path animation keyframes (rotation)
 const repeatPathAni = keyframes({
   from: {
     transform: 'rotate(0deg)',
@@ -149,6 +165,7 @@ const repeatPathAni = keyframes({
   },
 })
 
+// Repeat path animation style
 export const repeatPath = style({
   selectors: {
     [`${animating} &`]: {
@@ -157,6 +174,8 @@ export const repeatPath = style({
     },
   },
 })
+
+// Repeat path animation for one path
 export const repeatPathOne = style({
   transformOrigin: 'center center',
   transform: 'scale(0)',
@@ -167,9 +186,11 @@ export const repeatPathOneVisible = style({
   transform: 'scale(1, 1)',
 })
 
+// Shuffle animation duration constant
 const SHUFFLE_ANI_DURATION = 175
 export const SHUFFLE_ANI_DURATION_TOTAL = SHUFFLE_ANI_DURATION * 2
 
+// Shuffle icon style with animation support
 export const shuffleIcon = style([
   animatedIcon,
   style({
@@ -182,6 +203,7 @@ export const shuffleIcon = style([
   }),
 ])
 
+// Shuffle arrow animation (exit animation)
 const shuffleArrowExitAni = keyframes({
   '0%': {
     clipPath:
@@ -205,6 +227,7 @@ const shuffleArrowExitAni = keyframes({
   },
 })
 
+// Shuffle arrow enter animation (entrance animation)
 const shuffleArrowEnterAni = keyframes({
   '0%': {
     clipPath:
@@ -228,6 +251,7 @@ const shuffleArrowEnterAni = keyframes({
   },
 })
 
+// Shuffle arrow style with animation
 export const shuffleArrow = style({
   position: 'absolute',
   width: '100%',
