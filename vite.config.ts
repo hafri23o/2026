@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite'
-import path from 'path'  // <-- Import path module here
+import path from 'path'  // Import the path module
+import { createHtmlPlugin } from 'vite-plugin-html'  // Import createHtmlPlugin
 
 export default defineConfig({
   base: '/',
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, './src'),  // <-- Make sure path is used here
+      '~': path.resolve(__dirname, './src'),
     },
   },
   build: {
@@ -54,7 +55,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    createHtmlPlugin({ minify: true }),
+    createHtmlPlugin({ minify: true }),  // Use the imported createHtmlPlugin here
     injectScriptsToHtmlDuringBuild({
       input: ['./src/disable-app-if-not-supported.ts'],
     }),
