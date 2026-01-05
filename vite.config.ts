@@ -1,3 +1,5 @@
+import { defineConfig } from 'vite' // <-- Add this import
+
 export default defineConfig({
   base: '/',
   resolve: {
@@ -94,4 +96,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+})
