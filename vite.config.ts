@@ -1,6 +1,13 @@
 import { defineConfig } from 'vite'
-import path from 'path'  // Import the path module
+import path from 'path'  // Import path module
 import { createHtmlPlugin } from 'vite-plugin-html'  // Import createHtmlPlugin
+
+// Import missing plugins
+import injectScriptsToHtmlDuringBuild from 'vite-plugin-inject-scripts-to-html'  // Import injectScriptsToHtmlDuringBuild
+import mangleClassNames from 'vite-plugin-mangle-classnames'  // Import mangleClassNames
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'  // Import vanillaExtractPlugin
+import solidPlugin from 'vite-plugin-solid'  // Import solidPlugin
+import { serviceWorker } from 'vite-plugin-pwa'  // Import serviceWorker from vite-plugin-pwa
 
 export default defineConfig({
   base: '/',
@@ -55,13 +62,13 @@ export default defineConfig({
     },
   },
   plugins: [
-    createHtmlPlugin({ minify: true }),  // Use the imported createHtmlPlugin here
+    createHtmlPlugin({ minify: true }),  // Use createHtmlPlugin
     injectScriptsToHtmlDuringBuild({
       input: ['./src/disable-app-if-not-supported.ts'],
-    }),
-    mangleClassNames(),
-    vanillaExtractPlugin(),
-    solidPlugin({ hot: false }),
+    }),  // Use injectScriptsToHtmlDuringBuild
+    mangleClassNames(),  // Use mangleClassNames
+    vanillaExtractPlugin(),  // Use vanillaExtractPlugin
+    solidPlugin({ hot: false }),  // Use solidPlugin
     serviceWorker({
       manifest: {
         short_name: 'Osho',
@@ -72,7 +79,7 @@ export default defineConfig({
         background_color: '#1a1a1a',
         display: 'standalone',
         orientation: 'portrait',
-        description: manifest.description,
+        description: 'A comprehensive digital library of Osho\'s teachings and discourses.',
         icons: [
           {
             src: '/icons/icon_responsive.svg',
@@ -96,6 +103,6 @@ export default defineConfig({
           createMScreenshot('medium_3', '1276x960'),
         ],
       },
-    }),
+    }),  // Use serviceWorker
   ],
 })
