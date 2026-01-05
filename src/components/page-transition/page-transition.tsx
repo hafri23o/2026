@@ -1,6 +1,6 @@
 import { ParentComponent } from 'solid-js'
-import { CSSTransition } from '../css-transition/css-transition'
-import * as styles from './page-transition.css'
+import { CSSTransition } from '~/components/css-transition/css-transition' // Use path alias for components
+import * as styles from './page-transition.css' // Import styles from the same folder
 
 export interface PageTransitionProps {
   forwards?: boolean
