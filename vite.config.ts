@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite'
 import path from 'path'
-import { createHtmlPlugin } from 'vite-plugin-html'  // Correct plugin for HTML injection
+import { createHtmlPlugin } from 'vite-plugin-html'
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
-import solidPlugin from 'vite-plugin-solid'  // Correct plugin for Solid.js
-import { serviceWorker } from 'vite-plugin-pwa'  // Correct plugin for PWA
+import solidPlugin from 'vite-plugin-solid'
+import { VitePWA } from 'vite-plugin-pwa'  // Correct import for PWA plugin
 
 export default defineConfig({
   base: '/',
@@ -53,15 +53,15 @@ export default defineConfig({
         },
       ],
       worker: {
-        format: 'es', // Ensure the worker format is set to 'es'
+        format: 'es',
       },
     },
   },
   plugins: [
-    createHtmlPlugin({ minify: true }),  // Use vite-plugin-html for HTML injection
-    vanillaExtractPlugin(),  // Use vanillaExtractPlugin for CSS extraction
-    solidPlugin({ hot: false }),  // Use solidPlugin for Solid.js
-    serviceWorker({
+    createHtmlPlugin({ minify: true }),  // Use for HTML injection
+    vanillaExtractPlugin(),  // Use for CSS extraction
+    solidPlugin({ hot: false }),  // Use Solid.js plugin
+    VitePWA({  // Correct usage of the PWA plugin
       manifest: {
         short_name: 'Osho',
         name: 'Osho Digital Library',
@@ -95,6 +95,6 @@ export default defineConfig({
           createMScreenshot('medium_3', '1276x960'),
         ],
       },
-    }),  // Use serviceWorker for PWA
+    }),
   ],
 })
