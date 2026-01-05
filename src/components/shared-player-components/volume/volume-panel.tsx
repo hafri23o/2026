@@ -7,14 +7,15 @@ import * as styles from './volume.css'
 export const VolumePanel: VoidComponent = () => {
   const [playerState, playerActions] = usePlayerStore()
 
+  // Toggle the mute state
   const onVolumeToggleClickHandler = () => {
     playerActions.toggleMute()
   }
 
+  // Handle volume input change
   const onVolumeInputHandler = (e: InputEvent) => {
     const inputEl = e.target as HTMLInputElement
     const parsedValue = parseInt(inputEl.value, 10)
-    // This is probably not needed, but it doen't hurt.
     const value = Number.isInteger(parsedValue) ? parsedValue : 100
 
     playerActions.setVolume(value)
@@ -23,7 +24,7 @@ export const VolumePanel: VoidComponent = () => {
   return (
     <div class={styles.volumeControl}>
       <Slider
-        aria-label='Volume slider'
+        aria-label="Volume slider"
         value={playerState.volume}
         onInput={onVolumeInputHandler}
         class={styles.volumeSlider}
