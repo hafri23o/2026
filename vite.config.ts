@@ -1,10 +1,11 @@
-import { defineConfig } from 'vite' // <-- Add this import
+import { defineConfig } from 'vite'
+import path from 'path'  // <-- Import path module here
 
 export default defineConfig({
   base: '/',
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, './src'),
+      '~': path.resolve(__dirname, './src'),  // <-- Make sure path is used here
     },
   },
   build: {
