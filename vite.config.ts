@@ -28,7 +28,10 @@ export default defineConfig({
   build: {
     target: 'esnext', // Match with `tsconfig.json` target
     polyfillDynamicImport: false,
-    polyfillModulePreload: false,
+    // Remove the deprecated `polyfillModulePreload` option and switch to `modulePreload.polyfill`
+    modulePreload: {
+      polyfill: true,
+    },
     cssCodeSplit: false,
     minify: 'terser',
     terserOptions: {
@@ -106,11 +109,11 @@ export default defineConfig({
     }),
   ],
   
-  // Ensuring compatibility with `tsconfig.json` options
+  // Ensure compatibility with `tsconfig.json` options
   esbuild: {
     jsxFactory: 'solid', // For Solid.js JSX
     jsxFragment: 'solid', // For Solid.js JSX
-    tsconfig: './tsconfig.json', // Use custom tsconfig.json
+    // No need to pass `tsconfig` here; Vite will automatically respect your tsconfig.json
   },
   
   // Optimize and ensure proper types for Vite and Solid.js
