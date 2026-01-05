@@ -1,9 +1,11 @@
 import { style, globalStyle } from '@vanilla-extract/css'
-import { EASING_OUTGOING_40 } from '../../styles/shared.css'
-import { sharedStyles, sprinkles, vars } from '../../styles/styles.css'
+import { EASING_OUTGOING_40 } from '~/styles/shared.css' // Correctly using alias for shared styles
+import { sharedStyles, sprinkles, vars } from '~/styles/styles.css' // Corrected path using alias for styles
 
+// Media query for compact views
 export const COMPACT_MEDIA = '(max-width: 700px), (max-height: 440px)'
 
+// Container for the mini player, grid-based layout with responsive design
 export const container = style([
   sprinkles({
     columnGap: '16px',
@@ -42,6 +44,7 @@ export const container = style([
   }),
 ])
 
+// Information section for the mini player
 export const infoSection = style([
   sprinkles({
     display: 'flex',
@@ -56,8 +59,9 @@ export const infoSection = style([
   }),
 ])
 
+// Button for opening the full player
 export const openFullPlayerButton = style([
-  sharedStyles.flatButtonBase,
+  sharedStyles.flatButtonBase, // Reusing shared button styles
   sprinkles({
     gap: '16px',
     alignItems: 'center',
@@ -71,6 +75,7 @@ export const openFullPlayerButton = style([
   }),
 ])
 
+// Artwork container for the mini player
 export const artworkContainer = style([
   sprinkles({
     radius: '8px',
@@ -86,6 +91,7 @@ export const artworkContainer = style([
   }),
 ])
 
+// Artwork arrow style for interaction when hovering
 export const artworkArrow = style({
   position: 'absolute',
   inset: 0,
@@ -108,6 +114,7 @@ export const artworkArrow = style({
   },
 })
 
+// Controls section for the mini player
 export const miniPlayerControls = style({
   display: 'flex',
   flexDirection: 'row',
@@ -119,6 +126,7 @@ export const miniPlayerControls = style({
   gridArea: 'unset',
 })
 
+// Compact controls style for smaller layouts
 export const compactControls = style({
   display: 'flex',
   flexDirection: 'row',
@@ -131,6 +139,7 @@ export const compactControls = style({
   flex: 'none',
 })
 
+// Global styles for buttons inside compact controls
 globalStyle(`${compactControls} button`, {
   minWidth: '44px',
   width: '44px',
@@ -145,15 +154,18 @@ globalStyle(`${compactControls} button`, {
   transition: 'background-color 0.2s',
 })
 
+// Global style for hover effect on buttons
 globalStyle(`${compactControls} button:hover`, {
   backgroundColor: 'rgba(255, 255, 255, 0.08)',
 })
 
+// Global style for disabled button state
 globalStyle(`${compactControls} button:disabled`, {
   opacity: 0.38,
   cursor: 'auto',
 })
 
+// Global style for disabled button hover state
 globalStyle(`${compactControls} button:disabled:hover`, {
   backgroundColor: 'transparent',
 })
