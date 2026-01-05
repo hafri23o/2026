@@ -1,12 +1,9 @@
 import { defineConfig } from 'vite'
-import path from 'path'  // Import path module
-import { createHtmlPlugin } from 'vite-plugin-html'  // Use vite-plugin-html for HTML injection
-
-// Import missing plugins
-import mangleClassNames from 'vite-plugin-mangle-classnames'  // Import mangleClassNames
-import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'  // Import vanillaExtractPlugin
-import solidPlugin from 'vite-plugin-solid'  // Import solidPlugin
-import { serviceWorker } from 'vite-plugin-pwa'  // Import serviceWorker from vite-plugin-pwa
+import path from 'path'
+import { createHtmlPlugin } from 'vite-plugin-html'  // Correct plugin for HTML injection
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
+import solidPlugin from 'vite-plugin-solid'  // Correct plugin for Solid.js
+import { serviceWorker } from 'vite-plugin-pwa'  // Correct plugin for PWA
 
 export default defineConfig({
   base: '/',
@@ -62,9 +59,8 @@ export default defineConfig({
   },
   plugins: [
     createHtmlPlugin({ minify: true }),  // Use vite-plugin-html for HTML injection
-    mangleClassNames(),  // Use mangleClassNames
-    vanillaExtractPlugin(),  // Use vanillaExtractPlugin
-    solidPlugin({ hot: false }),  // Use solidPlugin
+    vanillaExtractPlugin(),  // Use vanillaExtractPlugin for CSS extraction
+    solidPlugin({ hot: false }),  // Use solidPlugin for Solid.js
     serviceWorker({
       manifest: {
         short_name: 'Osho',
@@ -99,6 +95,6 @@ export default defineConfig({
           createMScreenshot('medium_3', '1276x960'),
         ],
       },
-    }),  // Use serviceWorker
+    }),  // Use serviceWorker for PWA
   ],
 })
