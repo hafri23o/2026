@@ -1,8 +1,8 @@
-import { For, onCleanup, ParentComponent, Show } from 'solid-js'
-import '@a11y/focus-trap'
-import { ScrollContainer } from '../scroll-container/scroll-container'
-import { KeyboardCode } from '../../utils/key-codes'
-import * as styles from './modal.css'
+import { For, onCleanup, ParentComponent, Show } from 'solid-js' // Solid.js hooks and components
+import '@a11y/focus-trap' // Importing the focus trap package for accessibility
+import { ScrollContainer } from '~/components/scroll-container/scroll-container' // Updated path using alias '~'
+import { KeyboardCode } from '~/utils/key-codes' // Updated path using alias '~'
+import * as styles from './modal.css' // Importing modal styles (compatible with @vanilla-extract)
 
 export interface ModalButton {
   type: 'confirm' | 'cancel'
@@ -19,22 +19,23 @@ export interface ModalProps {
 
 export const Modal: ParentComponent<ModalProps> = (props) => {
   const cancel = () => {
-    props.onCancel?.()
+    props.onCancel?.() // Calls onCancel prop if defined
   }
 
   const confirm = () => {
-    props.onConfirm?.()
+    props.onConfirm?.() // Calls onConfirm prop if defined
   }
 
   const onKeyDownHandler = (e: KeyboardEvent) => {
     if (e.code === KeyboardCode.ESC) {
-      cancel()
+      cancel() // Calls cancel if the ESC key is pressed
     }
   }
 
+  // Set up event listener for keydown (ESC key to cancel)
   window.addEventListener('keydown', onKeyDownHandler)
   onCleanup(() => {
-    window.removeEventListener('keydown', onKeyDownHandler)
+    window.removeEventListener('keydown', onKeyDownHandler) // Clean up listener on component unmount
   })
 
   return (
@@ -52,14 +53,14 @@ export const Modal: ParentComponent<ModalProps> = (props) => {
                 disabled={button.disabled}
                 onClick={() => {
                   if (button.type === 'cancel') {
-                    cancel()
+                    cancel() // Trigger cancel on click
                   }
                   if (button.type === 'confirm') {
-                    confirm()
+                    confirm() // Trigger confirm on click
                   }
                 }}
               >
-                {button.title}
+                {button.title} {/* Button title based on the button object */}
               </button>
             )}
           </For>
