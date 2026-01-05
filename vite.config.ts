@@ -18,17 +18,16 @@ export default defineConfig({
   // Set base path for GitHub Pages deployment
   base: '/',
   
-  // Aliases for resolving paths based on tsconfig
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
     },
   },
-  
+
   build: {
     target: 'esnext', // Match with `tsconfig.json` target
     polyfillDynamicImport: false,
-    // Remove the deprecated `polyfillModulePreload` option and switch to `modulePreload.polyfill`
+    // Replaced deprecated `polyfillModulePreload` with new configuration
     modulePreload: {
       polyfill: true,
     },
@@ -53,13 +52,16 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Disable vendor chunk.
+        // Disable vendor chunk
         manualChunks: undefined,
         preferConst: true,
+        worker: {
+          format: 'module', // Ensure worker uses the 'module' format for code-splitting
+        },
       },
     },
   },
-  
+
   plugins: [
     createHtmlPlugin({
       minify: true,
@@ -108,15 +110,13 @@ export default defineConfig({
       },
     }),
   ],
-  
-  // Ensure compatibility with `tsconfig.json` options
+
   esbuild: {
     jsxFactory: 'solid', // For Solid.js JSX
     jsxFragment: 'solid', // For Solid.js JSX
-    // No need to pass `tsconfig` here; Vite will automatically respect your tsconfig.json
+    // No need to pass tsconfig here, Vite auto-detects it
   },
-  
-  // Optimize and ensure proper types for Vite and Solid.js
+
   optimizeDeps: {
     include: [
       'solid-js',
