@@ -52,7 +52,7 @@ export const PlayPreviousButton = (): JSXElement => (
   <PlaySkipButton
     iconFlipped
     title='Play previous track (SHIFT+P)'
-    action={(actions) => actions.playPreveousTrack()}
+    action={(actions) => actions.playPreviousTrack()}
   />
 )
 
