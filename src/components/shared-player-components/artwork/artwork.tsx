@@ -9,12 +9,13 @@ export interface ArtworkProps {
 }
 
 export const Artwork = (props: ArtworkProps): JSXElement => {
+  // Get player state from store, assuming playerState.activeTrack exists
   const [playerState] = usePlayerStore()
 
   return (
     <MusicImage
-      item={playerState.activeTrack}
-      class={clx(props.class, styles.artwork)}
+      item={playerState.activeTrack} // Ensure activeTrack exists in playerState
+      class={clx(props.class, styles.artwork)} // Combine passed class and styles
     />
   )
 }
