@@ -1,4 +1,4 @@
-/// <reference lib='WebWorker' />
+/// <reference lib="WebWorker" />
 
 import { Buffer } from 'buffer'
 import { parseBuffer as parseMetadata } from 'music-metadata'
@@ -6,8 +6,7 @@ import { TrackParseMessage } from '../message-types'
 import type { UnknownTrack, FileWrapper } from '../../../types/types'
 import { extractColorFromImage } from './color-from-image'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+// Assigning Buffer for web workers (needed for `Buffer`-based APIs)
 globalThis.Buffer = Buffer
 
 declare const self: DedicatedWorkerGlobalScope
@@ -15,6 +14,7 @@ declare const self: DedicatedWorkerGlobalScope
 // This limit is a bit arbitrary.
 const FILE_SIZE_LIMIT_500MB = 5e8
 
+// Function to parse each track
 const parseTrack = async (
   fileWrapper: FileWrapper,
 ): Promise<UnknownTrack | null> => {
@@ -24,8 +24,7 @@ const parseTrack = async (
         ? fileWrapper.file
         : await fileWrapper.file.getFile()
 
-    // Ignore files bigger than 500mb because of
-    // potential performance issues.
+    // Ignore files bigger than 500MB due to performance reasons.
     if (file.size > FILE_SIZE_LIMIT_500MB) {
       return null
     }
@@ -63,7 +62,7 @@ const parseTrack = async (
     }
     return trackData
   } catch (err) {
-    // Do not fail but still show an error.
+    // Do not fail, but log the error
     // eslint-disable-next-line no-console
     console.error(err)
 
@@ -71,14 +70,16 @@ const parseTrack = async (
   }
 }
 
+// Send messages back to the main thread
 const sendMsg = (options: TrackParseMessage) => {
   self.postMessage(options)
 }
 
+// Main function to process all tracks
 const parseAllTracks = async (inputFiles: FileWrapper[]) => {
   let parsedCount = 0
-
   const tracks: UnknownTrack[] = []
+
   for await (const file of inputFiles) {
     const metadata = await parseTrack(file)
 
@@ -90,10 +91,10 @@ const parseAllTracks = async (inputFiles: FileWrapper[]) => {
   }
 
   sendMsg({ finished: true, parsedCount, tracks })
-
-  self.close()
+  self.close() // Close the worker after finishing
 }
 
+// Listen for incoming messages to start parsing
 self.addEventListener('message', (event: MessageEvent<FileWrapper[]>) => {
   parseAllTracks(event.data)
 })
