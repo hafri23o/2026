@@ -1,22 +1,15 @@
-import path from 'node:path'
 import { defineConfig } from 'vite'
-import solidPlugin from 'vite-plugin-solid'
-import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
+import path from 'path'
 import { createHtmlPlugin } from 'vite-plugin-html'
-// import { ViteWebfontDownload } from 'vite-plugin-webfont-dl' // Removed - no longer needed
-import manifest from './package.json'
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
+import solidPlugin from 'vite-plugin-solid'
+import { VitePWA } from 'vite-plugin-pwa'  // Correct import for PWA plugin
+
 import { mangleClassNames } from './lib/vite-mangle-classnames'
 import { injectScriptsToHtmlDuringBuild } from './lib/vite-inject-scripts-to-html'
 import { serviceWorker } from './lib/vite-service-worker'
 
-const createMScreenshot = (name: string, sizes: string) => ({
-  sizes,
-  src: `/screenshots/${name}.webp`,
-  type: 'image/webp',
-})
-
 export default defineConfig({
-  // Set base path for GitHub Pages deployment
   base: '/',
   resolve: {
     alias: {
@@ -48,35 +41,31 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Disable vendor chunk.
+        format: 'es',
         manualChunks: undefined,
         preferConst: true,
+      },
+      plugins: [
+        {
+          name: 'worker-plugin-fix',
+          resolveId(id) {
+            if (id.endsWith('?worker')) {
+              return id;
+            }
+            return null;
+          },
+        },
+      ],
+      worker: {
+        format: 'es',
       },
     },
   },
   plugins: [
-    createHtmlPlugin({
-      minify: true,
-    }),
-    // Vite always bundles or imports all scripts into one file.
-    // In unsupported browsers we want to display error message about it,
-    // but because everything is bundled into one file, main app bundle
-    // fails to load because of syntax errors and no message is displayed.
-    // This plugin fixes that by emiting script separetly
-    // and including it inside html.
-    injectScriptsToHtmlDuringBuild({
-      input: ['./src/disable-app-if-not-supported.ts'],
-    }),
-    // If https://github.com/seek-oss/vanilla-extract/discussions/222 is ever implemented,
-    // this plugin can be replaced.
-    mangleClassNames(),
-    vanillaExtractPlugin(),
-    solidPlugin({
-      hot: false,
-    }),
-    // ViteWebfontDownload plugin removed to eliminate Google Fonts dependency
-    // Now using system fonts for better offline performance
-    serviceWorker({
+    createHtmlPlugin({ minify: true }),  // Use for HTML injection
+    vanillaExtractPlugin(),  // Use for CSS extraction
+    solidPlugin({ hot: false }),  // Use Solid.js plugin
+    VitePWA({  // Correct usage of the PWA plugin
       manifest: {
         short_name: 'Osho',
         name: 'Osho Digital Library',
@@ -86,7 +75,7 @@ export default defineConfig({
         background_color: '#1a1a1a',
         display: 'standalone',
         orientation: 'portrait',
-        description: manifest.description,
+        description: 'A comprehensive digital library of Osho\'s teachings and discourses.',
         icons: [
           {
             src: '/icons/icon_responsive.svg',
