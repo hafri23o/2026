@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite'
 import path from 'path'  // Import path module
-import { createHtmlPlugin } from 'vite-plugin-html'  // Import createHtmlPlugin
+import { createHtmlPlugin } from 'vite-plugin-html'  // Use vite-plugin-html for HTML injection
 
 // Import missing plugins
-import injectScriptsToHtmlDuringBuild from 'vite-plugin-inject-scripts-to-html'  // Import injectScriptsToHtmlDuringBuild
 import mangleClassNames from 'vite-plugin-mangle-classnames'  // Import mangleClassNames
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'  // Import vanillaExtractPlugin
 import solidPlugin from 'vite-plugin-solid'  // Import solidPlugin
@@ -62,10 +61,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    createHtmlPlugin({ minify: true }),  // Use createHtmlPlugin
-    injectScriptsToHtmlDuringBuild({
-      input: ['./src/disable-app-if-not-supported.ts'],
-    }),  // Use injectScriptsToHtmlDuringBuild
+    createHtmlPlugin({ minify: true }),  // Use vite-plugin-html for HTML injection
     mangleClassNames(),  // Use mangleClassNames
     vanillaExtractPlugin(),  // Use vanillaExtractPlugin
     solidPlugin({ hot: false }),  // Use solidPlugin
