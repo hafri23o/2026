@@ -22,35 +22,41 @@ export const ScrollContainer: ParentComponent<ScrollContainerProps> = (
 ) => {
   const isPlayerOverlayVisible = useContext(PlayerOverlayContext)
 
-  let targetEl!: HTMLDivElement
-  let scrollObserverEl!: HTMLDivElement
+  let targetEl: HTMLDivElement | undefined
+  let scrollObserverEl: HTMLDivElement | undefined
   let initial = true
 
+  // Use scaffold context if available
   const scaffoldContext = useScaffoldContext()
 
-  if (scaffoldContext) {
+  createEffect(() => {
+    if (!props.observeScrollState || !scaffoldContext) {
+      return
+    }
+
     const [, setState] = scaffoldContext
 
-    createEffect(() => {
-      if (!props.observeScrollState) {
-        return
-      }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (initial) {
+          initial = false
+          return
+        }
+        setState('isScolled', entry.intersectionRatio === 0)
+      },
+      { threshold: 0 },
+    )
 
-      const io = new IntersectionObserver(
-        ([entry]) => {
-          if (initial) {
-            initial = false
-            return
-          }
-          setState('isScolled', entry.intersectionRatio === 0)
-        },
-        { threshold: 0 },
-      )
-
+    if (scrollObserverEl) {
       io.observe(scrollObserverEl)
-      onCleanup(() => io.unobserve(scrollObserverEl))
+    }
+
+    onCleanup(() => {
+      if (scrollObserverEl) {
+        io.unobserve(scrollObserverEl)
+      }
     })
-  }
+  })
 
   return (
     <div
@@ -63,7 +69,6 @@ export const ScrollContainer: ParentComponent<ScrollContainerProps> = (
     >
       <ScrollTargetContext.Provider value={{ scrollTarget: targetEl }}>
         <div ref={scrollObserverEl} class={styles.scrollObserver} />
-
         <div class={styles.contentSizer}>{props.children}</div>
       </ScrollTargetContext.Provider>
     </div>
