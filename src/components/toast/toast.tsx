@@ -15,13 +15,14 @@ export { toast }
 export type { ToastOptions, ToastButton }
 
 const DEFAULT_DURATION = 8000
-const DEFAULT_BUTTON = {
+const DEFAULT_BUTTON: ToastButton = {
   title: 'Dismiss',
 }
 
 const ToastItem: VoidComponent<ToastOptions> = (props) => {
   const dismiss = () => toast.dismiss(props.id as string)
 
+  // Effect to auto-dismiss toast after the specified duration
   createEffect(() => {
     const dur = props.duration
     untrack(() => {
@@ -38,15 +39,19 @@ const ToastItem: VoidComponent<ToastOptions> = (props) => {
       <div class={styles.message}>{props.message}</div>
       <div class={styles.buttons}>
         <Switch>
+          {/* Show spinner if controls is 'spinner' */}
           <Match when={props.controls === 'spinner'}>
             <Spinner class={styles.spinner} />
           </Match>
+
+          {/* Render buttons if controls are defined */}
           <Match when={props.controls !== false}>
             <For each={(props.controls || [DEFAULT_BUTTON]) as ToastButton[]}>
               {(btnProps) => (
                 <button
                   class={styles.btn}
                   onClick={() => {
+                    // Execute button action and dismiss toast
                     btnProps.action?.()
                     dismiss()
                   }}
@@ -64,6 +69,6 @@ const ToastItem: VoidComponent<ToastOptions> = (props) => {
 
 export const Toaster: VoidComponent = () => (
   <For each={toasts as ToastOptions[]}>
-    {(t: ToastOptions) => <ToastItem {...t} />}
+    {(toastOptions) => <ToastItem {...toastOptions} />}
   </For>
 )
