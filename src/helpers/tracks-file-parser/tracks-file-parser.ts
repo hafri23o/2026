@@ -7,8 +7,9 @@ export const tracksParser = async (
   files: FileWrapper[],
   trackParsed: TrackParsedFn,
 ): Promise<UnknownTrack[]> => {
+  // Dynamically import the worker and ensure it is treated as a module
   const TrackWorkerModule = await import(
-    './worker/tracks-file-parser-worker?worker&inline'
+    './worker/tracks-file-parser-worker?worker&module' // Ensure module format
   )
   const TrackWorker = TrackWorkerModule.default
 
@@ -16,6 +17,7 @@ export const tracksParser = async (
     const worker = new TrackWorker()
 
     worker.addEventListener('error', reject)
+
     worker.addEventListener(
       'message',
       ({ data }: MessageEvent<TrackParseMessage>) => {
@@ -27,6 +29,7 @@ export const tracksParser = async (
       },
     )
 
+    // Send files to the worker
     worker.postMessage(files)
   })
 }
