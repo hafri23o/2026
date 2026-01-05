@@ -10,6 +10,7 @@ export type SliderProps = Omit<JSX.HTMLAttributes<HTMLInputElement>, 'ref'> & {
 }
 
 export const Slider = (props: SliderProps): JSXElement => {
+  // Merging default and user-provided props
   const mergedProps = mergeProps(
     {
       min: 0,
@@ -20,19 +21,22 @@ export const Slider = (props: SliderProps): JSXElement => {
 
   let inputEl!: HTMLInputElement
 
+  // Create an effect to update the slider value dynamically
   createEffect(() => {
     const percentage = (mergedProps.value * 100) / mergedProps.max
     const percentageSafe = Number.isFinite(percentage) ? percentage : 0
 
+    // Update the slider CSS variable with the computed percentage
     inputEl.style.setProperty(styles.sliderValueVarName, `${percentageSafe}%`)
   })
 
   return (
     <input
-      {...mergedProps}
-      ref={inputEl}
-      type='range'
-      class={clx(styles.slider, props.class)}
+      {...mergedProps} // Spread the merged props (like value, min, max, etc.)
+      ref={inputEl} // Reference to the input element for direct manipulation
+      type="range" // Slider input type
+      class={clx(styles.slider, props.class)} // Combine the class from props and Vanilla Extract styles
+      disabled={props.disabled} // Disable the slider if the prop is set
     />
   )
 }
