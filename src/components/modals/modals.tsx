@@ -1,25 +1,14 @@
 import { nanoid } from 'nanoid'
-import {
-  createContext,
-  For,
-  useContext,
-  JSX,
-  lazy,
-  ParentComponent,
-} from 'solid-js'
+import { createContext, For, useContext, JSX, lazy, ParentComponent } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { Dynamic } from 'solid-js/web'
-import { InternalModalProps } from './types'
-import * as styles from './modals.css'
+import { InternalModalProps } from '~/components/types'  // Adjusting path using tsconfig alias
+import * as styles from '~/styles/modals.css'  // Using alias for styles import
 
 const MODALS = {
-  viewArtists: lazy(() => import('./view-artists/view-artists')),
-  addToPlaylists: lazy(
-    () => import('./add-to-playlist-modal/add-to-playlist-modal'),
-  ),
-  createOrRenamePlaylist: lazy(
-    () => import('./create-or-rename-playlist/create-or-rename-playlist'),
-  ),
+  viewArtists: lazy(() => import('~/components/modals/view-artists/view-artists')),  // Adjusted import paths
+  addToPlaylists: lazy(() => import('~/components/modals/add-to-playlist-modal/add-to-playlist-modal')),
+  createOrRenamePlaylist: lazy(() => import('~/components/modals/create-or-rename-playlist/create-or-rename-playlist')),
 } as const
 
 type UnwrapComponentProps<T> = T extends (props: infer U) => JSX.Element ? U : T
