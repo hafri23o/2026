@@ -28,6 +28,7 @@ export const Controls: VoidComponent = () => {
 
   return (
     <div class={styles.controls}>
+      {/* Shuffle button */}
       <IconButton
         title={playerState.shuffle ? 'Disable shuffle' : 'Enable shuffle'}
         onClick={onShuffleClickHandler}
@@ -42,9 +43,17 @@ export const Controls: VoidComponent = () => {
         </div>
         <div class={styles.enabledIndicator} />
       </IconButton>
+
+      {/* Play previous button */}
       <PlayPreviousButton />
+      
+      {/* Play/pause button */}
       <PlayPauseButton />
+
+      {/* Play next button */}
       <PlayNextButton />
+
+      {/* Repeat button */}
       <IconButton
         title={REPEAT_TITLES[playerState.repeat]}
         onClick={onRepeatClickHandler}
@@ -54,19 +63,18 @@ export const Controls: VoidComponent = () => {
             styles.repeatIcon,
             playerState.repeat !== RepeatState.OFF && styles.enabled,
           )}
-          viewBox='0 0 24 24'
+          viewBox="0 0 24 24"
         >
           <path
             class={styles.repeatPath}
-            d='M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z'
+            d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
           />
           <path
             class={clx(
               styles.repeatPathOne,
-              playerState.repeat === RepeatState.ONCE &&
-                styles.repeatPathOneVisible,
+              playerState.repeat === RepeatState.ONCE && styles.repeatPathOneVisible,
             )}
-            d='M 13,15 V 9.0000002 H 12 L 10,10 v 1 h 1.5 v 4 z'
+            d="M 13,15 V 9.0000002 H 12 L 10,10 v 1 h 1.5 v 4 z"
           />
         </svg>
         <div class={styles.enabledIndicator} />
