@@ -8,12 +8,12 @@ import {
 } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { FocusTrap } from '@a11y/focus-trap'
-import { EASING_INCOMING_80 } from '../../styles/shared.css'
-import { clx, doesElementContainFocus } from '../../utils'
+import { EASING_INCOMING_80 } from '~/styles/shared.css'  // Correct path alias
+import { clx, doesElementContainFocus } from '~/utils'  // Correct path alias
 import { getMeasurementsFromAnchor } from './helpers/get-menu-position-from-anchor'
-import { animateFade } from '../../helpers/animations/animations'
-import { KeyboardCode } from '../../utils/key-codes'
-import { List } from '../list/list'
+import { animateFade } from '~/helpers/animations/animations'  // Correct path alias
+import { KeyboardCode } from '~/utils/key-codes'  // Correct path alias
+import { List } from '~/components/list/list'  // Correct path alias
 import type {
   MenuContextProps,
   MenuItem,
@@ -36,7 +36,6 @@ export const MenuProvider: ParentComponent = (props) => {
   })
 
   let menuEl!: HTMLDivElement
-
   let elementToReturnFocusTo: HTMLElement | undefined
 
   const show: MenuContextProps['show'] = (
