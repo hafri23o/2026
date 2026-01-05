@@ -1,5 +1,7 @@
 import { style, keyframes } from '@vanilla-extract/css'
 
+// Spinner from https://codepen.io/mrrocks/pen/EiplA
+
 // Spinner animation duration and stroke offset
 const DURATION = '1.4s'
 const OFFSET = 187
