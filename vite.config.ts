@@ -15,9 +15,7 @@ const createMScreenshot = (name: string, sizes: string) => ({
 })
 
 export default defineConfig({
-  // Set base path for GitHub Pages deployment
   base: '/',
-  
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
@@ -25,9 +23,8 @@ export default defineConfig({
   },
 
   build: {
-    target: 'esnext', // Match with `tsconfig.json` target
+    target: 'esnext',
     polyfillDynamicImport: false,
-    // Replaced deprecated `polyfillModulePreload` with new configuration
     modulePreload: {
       polyfill: true,
     },
@@ -52,11 +49,10 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Disable vendor chunk
         manualChunks: undefined,
         preferConst: true,
         worker: {
-          format: 'module', // Ensure worker uses the 'module' format for code-splitting
+          format: 'module', // Ensure workers use the "module" format
         },
       },
     },
@@ -70,9 +66,9 @@ export default defineConfig({
       input: ['./src/disable-app-if-not-supported.ts'],
     }),
     mangleClassNames(),
-    vanillaExtractPlugin(), // Ensure vanilla-extract integration
+    vanillaExtractPlugin(),
     solidPlugin({
-      hot: false, // Disable HMR (Hot Module Replacement) for Solid.js
+      hot: false,
     }),
     serviceWorker({
       manifest: {
@@ -112,9 +108,8 @@ export default defineConfig({
   ],
 
   esbuild: {
-    jsxFactory: 'solid', // For Solid.js JSX
-    jsxFragment: 'solid', // For Solid.js JSX
-    // No need to pass tsconfig here, Vite auto-detects it
+    jsxFactory: 'solid',
+    jsxFragment: 'solid',
   },
 
   optimizeDeps: {
