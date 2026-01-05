@@ -1,9 +1,9 @@
 import { createMemo, createSignal, Show } from 'solid-js'
-import { useEntitiesStore } from '../../../stores/stores'
-import { Modal } from '../../modal/modal'
-import { PlaylistList } from '../../entities-lists/playlists-list/playlists-list'
-import { InternalModalProps } from '../types'
-import { MessageBanner } from '../../message-banner/message-banner'
+import { useEntitiesStore } from '~/stores/stores'  // Adjusted path using alias
+import { Modal } from '~/components/modal/modal'  // Adjusted path using alias
+import { PlaylistList } from '~/components/entities-lists/playlists-list/playlists-list'  // Adjusted path using alias
+import { InternalModalProps } from '~/components/types'  // Adjusted path using alias
+import { MessageBanner } from '~/components/message-banner/message-banner'  // Adjusted path using alias
 
 export interface AddToPlaylistModalProps extends InternalModalProps {
   trackIds: readonly string[]
@@ -25,6 +25,7 @@ const AddToPlaylistModal = (props: AddToPlaylistModalProps) => {
     setSelected(id)
   }
 
+  // The `entities.playlists` should be an object with string keys, making sure that the typing matches
   const items = createMemo(() => Object.keys(entities.playlists))
 
   return (
@@ -44,7 +45,7 @@ const AddToPlaylistModal = (props: AddToPlaylistModalProps) => {
         <PlaylistList
           hideFavorites
           disableMenu
-          items={Object.keys(entities.playlists)}
+          items={items()}  // Ensure we pass the array of playlist IDs
           selectedId={selected()}
           onItemClick={onItemClick}
         />
