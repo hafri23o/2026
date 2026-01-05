@@ -1,23 +1,32 @@
+import path from 'node:path'
 import { defineConfig } from 'vite'
-import path from 'path'
-import { createHtmlPlugin } from 'vite-plugin-html'
-import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 import solidPlugin from 'vite-plugin-solid'
-import { VitePWA } from 'vite-plugin-pwa'  // Correct import for PWA plugin
-
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
+import { createHtmlPlugin } from 'vite-plugin-html'
 import { mangleClassNames } from './lib/vite-mangle-classnames'
 import { injectScriptsToHtmlDuringBuild } from './lib/vite-inject-scripts-to-html'
 import { serviceWorker } from './lib/vite-service-worker'
+import manifest from './package.json'
+
+const createMScreenshot = (name: string, sizes: string) => ({
+  sizes,
+  src: `/screenshots/${name}.webp`,
+  type: 'image/webp',
+})
 
 export default defineConfig({
+  // Set base path for GitHub Pages deployment
   base: '/',
+  
+  // Aliases for resolving paths based on tsconfig
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
     },
   },
+  
   build: {
-    target: 'esnext',
+    target: 'esnext', // Match with `tsconfig.json` target
     polyfillDynamicImport: false,
     polyfillModulePreload: false,
     cssCodeSplit: false,
@@ -41,31 +50,26 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        format: 'es',
+        // Disable vendor chunk.
         manualChunks: undefined,
         preferConst: true,
       },
-      plugins: [
-        {
-          name: 'worker-plugin-fix',
-          resolveId(id) {
-            if (id.endsWith('?worker')) {
-              return id;
-            }
-            return null;
-          },
-        },
-      ],
-      worker: {
-        format: 'es',
-      },
     },
   },
+  
   plugins: [
-    createHtmlPlugin({ minify: true }),  // Use for HTML injection
-    vanillaExtractPlugin(),  // Use for CSS extraction
-    solidPlugin({ hot: false }),  // Use Solid.js plugin
-    VitePWA({  // Correct usage of the PWA plugin
+    createHtmlPlugin({
+      minify: true,
+    }),
+    injectScriptsToHtmlDuringBuild({
+      input: ['./src/disable-app-if-not-supported.ts'],
+    }),
+    mangleClassNames(),
+    vanillaExtractPlugin(), // Ensure vanilla-extract integration
+    solidPlugin({
+      hot: false, // Disable HMR (Hot Module Replacement) for Solid.js
+    }),
+    serviceWorker({
       manifest: {
         short_name: 'Osho',
         name: 'Osho Digital Library',
@@ -75,7 +79,7 @@ export default defineConfig({
         background_color: '#1a1a1a',
         display: 'standalone',
         orientation: 'portrait',
-        description: 'A comprehensive digital library of Osho\'s teachings and discourses.',
+        description: manifest.description,
         icons: [
           {
             src: '/icons/icon_responsive.svg',
@@ -101,4 +105,21 @@ export default defineConfig({
       },
     }),
   ],
+  
+  // Ensuring compatibility with `tsconfig.json` options
+  esbuild: {
+    jsxFactory: 'solid', // For Solid.js JSX
+    jsxFragment: 'solid', // For Solid.js JSX
+    tsconfig: './tsconfig.json', // Use custom tsconfig.json
+  },
+  
+  // Optimize and ensure proper types for Vite and Solid.js
+  optimizeDeps: {
+    include: [
+      'solid-js',
+      '@vanilla-extract/css',
+      '@vanilla-extract/dynamic',
+      '@vanilla-extract/sprinkles',
+    ],
+  },
 })
